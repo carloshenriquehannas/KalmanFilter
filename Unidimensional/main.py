@@ -1,3 +1,18 @@
+import matplotlib.pyplot as plt
+
+############################# SISTEMA ESTATICO #########################################################################
+def sistema_estatico(VetMedido, VetEstimado, estimado):
+    for i in range(0, 10):
+        medido = float(input('Valor medido: '))
+
+        K = (1)/(i+1)                                                                   #Ganho
+        estimado = estimado + K*(medido - estimado)                                     #Algoritmo de estimacao
+
+        VetMedido.insert(i, medido)                                                     #Insere valor medido no vetor
+        VetEstimado.insert(i, estimado)                                                 #Insere valor estimado no vetor
+
+########################################################################################################################
+
 ############################## MAIN ####################################################################################
 
 print('1 - Sistema Estatico')
@@ -13,8 +28,7 @@ VetEstimado = []                                                                
 
 match opcao:
     case 1:
-        print("teste 1")
-        #sistema_estatico(VetMedido, VetEstimado, estimado)
+        sistema_estatico(VetMedido, VetEstimado, estimado)
     case 2:
         print("teste 2")
         #sistema_dinamico(VetMedido, VetEstimado, estimado)
@@ -23,3 +37,9 @@ match opcao:
         #kalman_1d(VetMedido, VetEstimado, estimado)
     case default:
         print('Default')
+
+plt.plot(VetMedido, 'go')
+plt.plot(VetEstimado)
+plt.xlabel('Tempo')
+plt.ylabel('Medicao')
+plt.show()
