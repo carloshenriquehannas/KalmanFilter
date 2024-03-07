@@ -1,9 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DADOS INICIAIS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-sigma_acel = 0.2*0.2;
-sigma_medicao = 3*3;
+sigma_acel = 0.2*0.2;                                   %Constante
+sigma_medicao = 3*3;                                    %Constante
 
-x = zeros(6, 1);                                        %Inicializacao da matriz de estimativa
+x = zeros(6, 1);                                        %Inicializacao da matriz 6x1 de estimativa
 
 Q = [0.25 0.5 0.5 0 0 0 ; 0.5 1 1 0 0 0 ; 0.5 1 1 0 0 0 ; 0 0 0 0.25 0.5 0.5 ; 0 0 0 0.5 1 1 ; 0 0 0 0.5 1 1]*(sigma_acel);
 
@@ -20,17 +20,19 @@ I = eye(6);                                             %Matriz identidade 6x6
 Ft = transpose(F);
 Ht = transpose(H);
 
-z = zeros(2, 1);                                        %Inicializacao da matriz de medicao
+z = zeros(2, 1);                                        %Inicializacao da matriz 2x1 de medicao
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Laco de repeticao para medicao e estimacao de i fatores
+estimados = zeros(6, 2);                               %Inicializacao da matriz de estimativa, com x dados em i tempos
+
+%Laco de repeticao para medicao e estimacao de i tempos
 for i = 1:2
 
     x = F*x;                                            %Predicao da estimativa 
     P = F*P*Ft + Q;                                     %Predicao da covariancia
 
-    Entrada da matriz z pelo usuario
+    %Entrada da matriz z pelo usuario
     for j = 1:2
         z(j) = input(sprintf('Digite o valor para a posição (%d, 1) da matriz: ', j));
     end                       
@@ -41,6 +43,6 @@ for i = 1:2
     x = x + K*(z - H*x);                                %Atualizacao da matriz de estimativa
     P = (I - K*H)*P*(transpose(I - K*H)) + K*R*Kt;      %Atualizacao da matriz de covariancia
 
-    disp(x)                                             %Print da matriz de estimativa
+    estimados(:,i) = x;                                 %Matriz de estimados recebe x, no tempo i
 
 end
