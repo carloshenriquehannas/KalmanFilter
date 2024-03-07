@@ -19,20 +19,27 @@ I = eye(6);
 
 Ft = transpose(F);
 Ht = transpose(H);
-Kt = transpose(K);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PREDICOES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+z = zeros(2, 1);                                        %Inicializacao da matriz de medicao
 
-x = F*x;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-P = F*P*Ft + Q;
+for i = 1:2
 
-z = [301.5 ; -401.46];
+    x = F*x;                                            %Predicao da posicao 
+    P = F*P*Ft + Q;                                     %Predicao da covariancia
 
-K = P*Ht*(H*P*Ht + R)^(-1);
+    %Entrada da matriz z pelo usuario
+    for j = 1:2
+        z(j) = input(sprintf('Digite o valor para a posição (%d, 1) da matriz: ', j));
+    end                       
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ATUALIZACOES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    K = P*Ht*(H*P*Ht + R)^(-1);                         %Predicao do ganho de Kalman
+    Kt = transpose(K);                                  %Atualizacao da matriz transposta do ganho de Kalman                                  
 
-x = x + K*(z - H*x);
+    x = x + K*(z - H*x);                                %Atualizacao da matriz de posicao
+    P = (I - K*H)*P*(transpose(I - K*H)) + K*R*Kt;      %Atualizacao da matriz de covariancia
 
-P = (I - K*H)*P*(transpose(I - K*H)) + K*R*Kt;
+    disp(x)
+
+end
