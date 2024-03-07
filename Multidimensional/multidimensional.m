@@ -24,10 +24,11 @@ z = zeros(2, 1);                                        %Inicializacao da matriz
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-estimados = zeros(6, 2);                               %Inicializacao da matriz de estimativa, com x dados em i tempos
+estimados = zeros(6, 35);                               %Inicializacao da matriz de estimativa, com x dados em i tempos
+medidos = zeros(2, 35);                                 %Inicializacao da matriz auxiliar de medicao, com x dados em i tempos
 
 %Laco de repeticao para medicao e estimacao de i tempos
-for i = 1:2
+for i = 1:35
 
     x = F*x;                                            %Predicao da estimativa 
     P = F*P*Ft + Q;                                     %Predicao da covariancia
@@ -44,5 +45,21 @@ for i = 1:2
     P = (I - K*H)*P*(transpose(I - K*H)) + K*R*Kt;      %Atualizacao da matriz de covariancia
 
     estimados(:,i) = x;                                 %Matriz de estimados recebe x, no tempo i
+    medidos(:,i) = z;                                   %Matriz de medidos recebe z, no tempo i                               
 
 end
+
+estimadoX = estimados(1,:);                              %Armazena as estimativas da posicao X
+estimadoY = estimados(4,:);                              %Armazena as estimativas da posicao Y 
+medidoX = medidos(1,:);
+medidoY = medidos(2,:);
+
+%Plot do grafico de estimativa da posicao XY
+figure
+plot(estimadoX, estimadoY, 'b')
+hold on
+scatter(medidoX,medidoY,'r')
+
+xlabel('Posicao X (m)');
+ylabel('Posicao Y (m)');
+title('Estimativa vs Medicao da posicao XY');
