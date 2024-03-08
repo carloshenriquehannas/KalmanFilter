@@ -1,47 +1,53 @@
+clear all
+close all
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DADOS INICIAIS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-sigma_acel = 0.2*0.2;                                   %Constante
-sigma_medicao = 3*3;                                    %Constante
+%Constantes
+sigma = 20;
+tempo = 0.25;
+epsilon = 0.1;
+aceleracao = 30;
 
-x = zeros(6, 1);                                        %Inicializacao da matriz 6x1 de estimativa
+%Equacao de predicao: x = Fx+Gu
+x = zeros(2, 1);                                        %Inicializacao da matriz 2x1 de estimativa
+F = [1 tempo ; 0 1];                                    %Inicializacao da matriz F
+G = [0.5*tempo^2 ; tempo];                              %Inicializacao da matriz G
+u = 0;                                                  %Inicializacao da variavel de input
 
-Q = [0.25 0.5 0.5 0 0 0 ; 0.5 1 1 0 0 0 ; 0.5 1 1 0 0 0 ; 0 0 0 0.25 0.5 0.5 ; 0 0 0 0.5 1 1 ; 0 0 0 0.5 1 1]*(sigma_acel);
+%Equacao de predicao da covariancia: P = F*P*Ft+Q
+P = [500 0 ; 0 500];                                    %Inicializacao de uma covariancia arbitraria
+Q = [(tempo^4)/4 (tempo^3)/2 ; (tempo^3)/2 tempo^2]*epsilon^2;
 
-P = [500 0 0 0 0 0 ; 0 500 0 0 0 0 ; 0 0 500 0 0 0 ; 0 0 0 500 0 0 ; 0 0 0 0 500 0 ; 0 0 0 0 0 500];
+H = eye(2);
 
-F = [1 1 0.5 0 0 0 ; 0 1 1 0 0 0 ; 0 0 1 0 0 0 ; 0 0 0 1 1 0.5 ; 0 0 0 0 1 1 ; 0 0 0 0 0 1];
+R = sigma^2;
 
-H = [1 0 0 0 0 0 ; 0 0 0 1 0 0 ];
-
-R = [sigma_medicao 0 ; 0 sigma_medicao];
-
-I = eye(6);                                             %Matriz identidade 6x6
+I = eye(2);                                             %Matriz identidade 6x6
 
 Ft = transpose(F);
 Ht = transpose(H);
 
-z = zeros(2, 1);                                        %Inicializacao da matriz 2x1 de medicao
+z = zeros(2, 1);                                        %Inicializacao da matriz 1x2 de medicao. z = [altura aceleracao]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-estimados = zeros(6, 10);                               %Inicializacao da matriz de estimativa, com x dados em i tempos
-medidos = zeros(2, 10);                                 %Inicializacao da matriz auxiliar de medicao, com x dados em i tempos
+estimados = zeros(2,10);                               %Inicializacao da matriz de estimativa, com x dados em i tempos
+medidos = zeros(2,10);                                 %Inicializacao da matriz auxiliar de medicao, com x dados em i tempos
 
 %Laco de repeticao para medicao e estimacao de i tempos
-for i = 1:10
+for i = 1:2
 
-    x = F*x;                                            %Predicao da estimativa 
+    x = F*x + G*u;                                      %Predicao da estimativa 
     P = F*P*Ft + Q;                                     %Predicao da covariancia
-
-    %Entrada da matriz z pelo usuario
-    for j = 1:2
-        z(j) = input(sprintf('Digite o valor para a posição (%d, 1) da matriz: ', j));
-    end                       
-
     K = P*Ht*(H*P*Ht + R)^(-1);                         %Predicao do ganho de Kalman
-    Kt = transpose(K);                                  %Atualizacao da matriz transposta do ganho de Kalman                                  
 
-    x = x + K*(z - H*x);                                %Atualizacao da matriz de estimativa
+    %Entrada do usuario   
+    z(1) = input(sprintf('Digite o valor da medicao z: ')); %Medicao da altura
+    z(2) = input(sprintf('Digite o valor do input u: ')) - 9.8;   %Medicao da aceleracao descontando a gravidade
+
+    Kt = transpose(K);                                  %Atualizacao da matriz transposta do ganho de Kalman                                  
+    x = x + K*(z - H*x);
     P = (I - K*H)*P*(transpose(I - K*H)) + K*R*Kt;      %Atualizacao da matriz de covariancia
 
     estimados(:,i) = x;                                 %Matriz de estimados recebe x, no tempo i
@@ -49,20 +55,25 @@ for i = 1:10
 
 end
 
-estimadoX = estimados(1,:);                              %Armazena as estimativas da posicao X
-estimadoY = estimados(4,:);                              %Armazena as estimativas da posicao Y 
-medidoX = medidos(1,:);
-medidoY = medidos(2,:);
+estimado_altura = estimados(1,:);                              %Armazena as estimativas da posicao X
+estimado_velocidade = estimados(2,:);                              %Armazena as estimativas da posicao Y 
+medido_altura = medidos(1,:);
+medido_velocidade= medidos(2,:);
 
-%Plot do grafico de estimativa da posicao XY
+%Plot do grafico de altura
 figure
-plot(estimadoX, estimadoY, 'b')
-hold on
-scatter(medidoX,medidoY,'r')
+plot(estimado_altura,'b')
+scatter(medido_altura,'r')
+legend(['estimado'; 'medido']);
+xlabel('Tempo (s)');
+ylabel('Altura (m)');
+title('Estimativa vs Medicao da altura');
 
-xlabel('Posicao X (m)');
-ylabel('Posicao Y (m)');
-title('Estimativa vs Medicao da posicao XY');
-legend(['estimado';'medido']);
-
-
+%Plot do grafico de velocidade
+figure
+plot(estimado_altura,'b')
+scatter(medido_altura,'r')
+legend(['estimado'; 'medido']);
+xlabel('Tempo (s)');
+ylabel('Altura (m)');
+title('Estimativa vs Medicao da altura');
