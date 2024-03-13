@@ -1,9 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DADOS INICIAIS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-sigma_acel = 0.2*0.2;
-sigma_medicao = 3*3;
+sigma_acel = 0.2*0.2;                                   %Constante
+sigma_medicao = 3*3;                                    %Constante
 
-x = [0 ; 0 ; 0 ; 0 ; 0 ; 0];
+x = zeros(6, 1);                                        %Inicializacao da matriz 6x1 de estimativa
 
 Q = [0.25 0.5 0.5 0 0 0 ; 0.5 1 1 0 0 0 ; 0.5 1 1 0 0 0 ; 0 0 0 0.25 0.5 0.5 ; 0 0 0 0.5 1 1 ; 0 0 0 0.5 1 1]*(sigma_acel);
 
@@ -15,24 +15,51 @@ H = [1 0 0 0 0 0 ; 0 0 0 1 0 0 ];
 
 R = [sigma_medicao 0 ; 0 sigma_medicao];
 
-I = eye(6);
+I = eye(6);                                             %Matriz identidade 6x6
 
 Ft = transpose(F);
 Ht = transpose(H);
-Kt = transpose(K);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PREDICOES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+z = zeros(2, 1);                                        %Inicializacao da matriz 2x1 de medicao
 
-x = F*x;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-P = F*P*Ft + Q;
+estimados = zeros(6, 35);                               %Inicializacao da matriz de estimativa, com x dados em i tempos
+medidos = zeros(2, 35);                                 %Inicializacao da matriz auxiliar de medicao, com x dados em i tempos
 
-z = [301.5 ; -401.46];
+%Laco de repeticao para medicao e estimacao de i tempos
+for i = 1:35
 
-K = P*Ht*(H*P*Ht + R)^(-1);
+    x = F*x;                                            %Predicao da estimativa 
+    P = F*P*Ft + Q;                                     %Predicao da covariancia
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ATUALIZACOES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %Entrada da matriz z pelo usuario
+    for j = 1:2
+        z(j) = input(sprintf('Digite o valor para a posição (%d, 1) da matriz: ', j));
+    end                       
 
-x = x + K*(z - H*x);
+    K = P*Ht*(H*P*Ht + R)^(-1);                         %Predicao do ganho de Kalman
+    Kt = transpose(K);                                  %Atualizacao da matriz transposta do ganho de Kalman                                  
 
-P = (I - K*H)*P*(transpose(I - K*H)) + K*R*Kt;
+    x = x + K*(z - H*x);                                %Atualizacao da matriz de estimativa
+    P = (I - K*H)*P*(transpose(I - K*H)) + K*R*Kt;      %Atualizacao da matriz de covariancia
+
+    estimados(:,i) = x;                                 %Matriz de estimados recebe x, no tempo i
+    medidos(:,i) = z;                                   %Matriz de medidos recebe z, no tempo i                               
+
+end
+
+estimadoX = estimados(1,:);                              %Armazena as estimativas da posicao X
+estimadoY = estimados(4,:);                              %Armazena as estimativas da posicao Y 
+medidoX = medidos(1,:);
+medidoY = medidos(2,:);
+
+%Plot do grafico de estimativa da posicao XY
+figure
+plot(estimadoX, estimadoY, 'b')
+hold on
+scatter(medidoX,medidoY,'r')
+
+xlabel('Posicao X (m)');
+ylabel('Posicao Y (m)');
+title('Estimativa vs Medicao da posicao XY');
