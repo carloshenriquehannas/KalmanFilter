@@ -45,24 +45,21 @@ z = np.zeros((2, 1))                #Inicia a matriz z 2x1 de medicao
 
 ################################FILTRO DE KALMAN MULTIDIMENSIONAL ##################################################
 
-x = np.dot(F, x)                    #Predicao da estimativa
-P = np.dot(np.dot(F, P), Ft) + Q    #Predicao da covariancia
+#Laco de repeticao para medicao e estimacao j vezes
+for j in range(0, 2):
+    x = np.dot(F, x)                    #Predicao da estimativa
+    P = np.dot(np.dot(F, P), Ft) + Q    #Predicao da covariancia
 
-z[0, 0] = 301.5                     #Entrada da medicao pelo usuario
-z[1, 0] = -401.46                   #Entrada da medicao pelo usuario
+    for i in range(0, 2):
+        z[i, 0] = float(input(f'Valor medido para a posicao ({i+1}, 1): '))                     #Entrada da medicao pelo usuario
 
-#Expressao matematica do Ganho de Kalman K: K = P*Ht*(H*P*Ht + R)^(-1);
-K = np.dot(np.dot(P, Ht), np.linalg.inv(np.dot(np.dot(H, P), Ht) + R))  #Predicao do Ganho de Kalman
-Kt = np.transpose(K)                                                    #Atualizacao da transposta de K
+    #Expressao matematica do Ganho de Kalman K: K = P*Ht*(H*P*Ht + R)^(-1);
+    K = np.dot(np.dot(P, Ht), np.linalg.inv(np.dot(np.dot(H, P), Ht) + R))  #Predicao do Ganho de Kalman
+    Kt = np.transpose(K)                                                    #Atualizacao da transposta de K
 
-#Expressao matematica da atualizacao de estimativa x: x = x + K*(z - H*x)
-x = x + np.dot(K, z - np.dot(H, x))                                     #Atualizacao da matriz de estimativa
+    #Expressao matematica da atualizacao de estimativa x: x = x + K*(z - H*x)
+    x = x + np.dot(K, z - np.dot(H, x))                                     #Atualizacao da matriz de estimativa
 
-#*FAZER: Expressao matematica da atualizacao de covariancia P: P = (I - K*H)*P*(transpose(I - K*H)) + K*R*Kt
-
-
-
-
-
-
+    #Expressao matematica da atualizacao de covariancia P: P = (I - K*H)*P*(transpose(I - K*H)) + K*R*Kt
+    P = np.dot(np.dot(I - np.dot(K, H), P), np.transpose(I - np.dot(K, H))) + np.dot(np.dot(K, R), Kt)
 
