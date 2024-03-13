@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-################################## INICIALIZACAO ###################################################################
+################################## INICIALIZACAO #######################################################################
 
 sigma_acel = 0.2                    #Desvio padrao da aceleracao
 sigma_medicao = 3                   #Desvio padrao da medicao
@@ -41,17 +41,22 @@ for j in range(0, 6):
 Ft = np.transpose(F)                #Inicia a matriz transposta de F
 Ht = np.transpose(H)                #Inicia a matriz transposta de H
 
-z = np.zeros((2, 1))                #Inicia a matriz z 2x1 de medicao
+################################ FILTRO DE KALMAN MULTIDIMENSIONAL #####################################################
 
-################################FILTRO DE KALMAN MULTIDIMENSIONAL ##################################################
+posicaoEstimadaX = []
+posicaoEstimadaY = []
+posicaoMedidaX = []
+posicaoMedidaY = []
 
 #Laco de repeticao para medicao e estimacao j vezes
-for j in range(0, 2):
+for j in range(0, 30):
     x = F @ x                   #Predicao da estimativa
     P = F @ P @ Ft + Q          #Predicao da covariancia
 
+    z = np.zeros((2, 1))  #Criar uma nova matriz z 2x1 para armazenar os valores medidos
+
     for i in range(0, 2):
-        z[i, 0] = float(input(f'Valor medido para a posicao ({i+1}, 1): '))                     #Entrada da medicao pelo usuario
+        z[i, 0] = float(input(f'Valor medido para a posicao ({i+1}, 1): '))             #Entrada da medicao pelo usuario
 
     #Expressao matematica do Ganho de Kalman K: K = P*Ht*(H*P*Ht + R)^(-1);
     K = P @ Ht @ np.linalg.inv(H @ P @ Ht + R)  #Predicao do Ganho de Kalman
@@ -62,3 +67,16 @@ for j in range(0, 2):
 
     #Expressao matematica da atualizacao de covariancia P: P = (I - K*H)*P*(transpose(I - K*H)) + K*R*Kt
     P = (I - K @ H) @ P @ (np.transpose(I - K @ H)) + K @ R @ Kt        #Atualizacao da matriz de covariancia
+
+    posicaoEstimadaX.append(x[0])      #Armazena as posicoes estimadas no eixo X (primeiro indice do vetor coluna x)
+    posicaoEstimadaY.append(x[3])      #Armazena as posicoes estimadas no eixo Y (quarto indice do vetor coluna y)
+
+    posicaoMedidaX.append(z[0])        #Armazena as posicoes medidas no eixo X (primeiro indice do vetor coluna z)
+    posicaoMedidaY.append(z[1])        #Armazena as posicoes medidas no eixo Y (segundo indice do vetor coluna z)
+
+plt.plot(posicaoEstimadaX, posicaoEstimadaY)
+plt.plot(posicaoMedidaX, posicaoMedidaY, 'go')
+plt.xlabel('Posicao X(m)')
+plt.ylabel('Posicao Y(m)')
+plt.title('Estimativa vs Medicao da posicao XY')
+plt.show()
