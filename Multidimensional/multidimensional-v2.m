@@ -42,7 +42,9 @@ for i = 1:10
 
     %Entrada do usuario   
     z(1) = input(sprintf('Digite o valor da medicao z: '));         %Medicao da altura
-    z(2) = input(sprintf('Digite o valor do input u: ')) - gravidade;     %Medicao da aceleracao descontando a gravidade
+    z(2) = input(sprintf('Digite o valor do input u: '));           %Medicao do controle
+
+    z(2) = z(2) - gravidade;
 
     Kt = transpose(K);                                  %Atualizacao da matriz transposta do ganho de Kalman                                  
     x = x + K*(z - H*x);
