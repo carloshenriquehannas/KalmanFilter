@@ -50,15 +50,18 @@ Ht = np.transpose(H)                                        #Inicializacao da ma
 
 ######################################## FILTRO DE KALMAN MULTIDIMENSIONAL ######################################
 
-x = F @ x + G * u                                           #Predicao da estimativa
-P = F @ P @ Ft + Q                                          #Predicao da covariancia
+for j in range(0, 30):
+    x = F @ x + G * u  # Predicao da estimativa
+    P = F @ P @ Ft + Q                                          #Predicao da covariancia
 
-K = P @ Ht @ np.linalg.inv(H @ P @ Ht + R)                  #Predicao do Ganho de Kalman
-Kt = np.transpose(K)                                        #Matriz transposta de K
+    K = P @ Ht @ np.linalg.inv(H @ P @ Ht + R)                  #Predicao do Ganho de Kalman
+    Kt = np.transpose(K)                                        #Matriz transposta de K
 
-z = 6.43                                                    #Input do usuario
-u = 39.81                                                   #Input do usuario
+    z = float(input('Medicao da posicao z: '))                  #Input do usuario
+    u = float(input('Medicao do controle u: '))                 #Input do usuario
 
-x = x + K @ (z - H @ x)                                         #Atualizacao da matriz de estimativas
-P = (I - K @ H) @ P @ (np.transpose(I - K @ H)) + K * R @ Kt    #Atualizacao da matriz de covariancias
+    u = u - gravidade                                           #Correcao do controle, devido ao acelerometro
+
+    x = x + K @ (z - H @ x)                                         #Atualizacao da matriz de estimativas
+    P = (I - K @ H) @ P @ (np.transpose(I - K @ H)) + K * R @ Kt    #Atualizacao da matriz de covariancias
 
