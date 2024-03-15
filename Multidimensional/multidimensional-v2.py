@@ -1,4 +1,4 @@
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 
 #################################################### INICIALIZACAO ##############################################
@@ -58,7 +58,7 @@ velocidadeEstimada = []
 posicaoMedida = []
 
 #Laco de repeticao para medicao e estimativa j vezes
-for j in range(0, 2):
+for j in range(0, 30):
     x = F @ x + G * u  # Predicao da estimativa
     P = F @ P @ Ft + Q                                          #Predicao da covariancia
 
@@ -78,3 +78,16 @@ for j in range(0, 2):
 
     velocidadeEstimada.append(x[1])                             #Armazena a velocidade estimada
 
+plt.subplot(2, 1, 1)
+plt.plot(posicaoEstimada)
+plt.plot(posicaoMedida,'go')
+plt.xlabel('Tempo')
+plt.ylabel('Altura (m)')
+plt.title('Estimativa vs Medicao da altura')
+
+plt.subplot(2, 1, 2)
+plt.plot(velocidadeEstimada)
+plt.xlabel('Tempo')
+plt.ylabel('Velocidade (m/s)')
+plt.title('Estimativa da velocidade')
+plt.show()
