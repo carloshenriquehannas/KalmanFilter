@@ -50,7 +50,15 @@ Ht = np.transpose(H)                                        #Inicializacao da ma
 
 ######################################## FILTRO DE KALMAN MULTIDIMENSIONAL ######################################
 
-for j in range(0, 30):
+#Vetores auxiliares de estimativa para plotagem de grafico
+posicaoEstimada = []
+velocidadeEstimada = []
+
+#Vetor auxiliar de medicao para plotagem de grafico
+posicaoMedida = []
+
+#Laco de repeticao para medicao e estimativa j vezes
+for j in range(0, 2):
     x = F @ x + G * u  # Predicao da estimativa
     P = F @ P @ Ft + Q                                          #Predicao da covariancia
 
@@ -64,4 +72,9 @@ for j in range(0, 30):
 
     x = x + K @ (z - H @ x)                                         #Atualizacao da matriz de estimativas
     P = (I - K @ H) @ P @ (np.transpose(I - K @ H)) + K * R @ Kt    #Atualizacao da matriz de covariancias
+
+    posicaoEstimada.append(x[0])                                #Armazena a altitude estimada
+    posicaoMedida.append(z)                                     #Armazena a altidude medida
+
+    velocidadeEstimada.append(x[1])                             #Armazena a velocidade estimada
 
