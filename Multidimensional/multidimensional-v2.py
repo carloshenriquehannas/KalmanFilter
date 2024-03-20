@@ -81,7 +81,6 @@ for j in range(0, 30):
 plt.subplot(2, 1, 1)
 plt.plot(posicaoEstimada)
 plt.plot(posicaoMedida,'go')
-plt.xlabel('Tempo')
 plt.ylabel('Altura (m)')
 plt.title('Estimativa vs Medicao da altura')
 
