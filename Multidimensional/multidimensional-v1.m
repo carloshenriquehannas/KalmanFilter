@@ -24,19 +24,24 @@ z = zeros(2, 1);                                        %Inicializacao da matriz
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-estimados = zeros(6, 35);                               %Inicializacao da matriz de estimativa, com x dados em i tempos
-medidos = zeros(2, 35);                                 %Inicializacao da matriz auxiliar de medicao, com x dados em i tempos
+load medidas_v1.mat
+N = length(medx);
+
+estimados = zeros(6, N);                               %Inicializacao da matriz de estimativa, com x dados em i tempos
+medidos = zeros(2, N);                                 %Inicializacao da matriz auxiliar de medicao, com x dados em i tempos
 
 %Laco de repeticao para medicao e estimacao de i tempos
-for i = 1:35
+for i = 1:N
 
     x = F*x;                                            %Predicao da estimativa 
     P = F*P*Ft + Q;                                     %Predicao da covariancia
 
     %Entrada da matriz z pelo usuario
-    for j = 1:2
-        z(j) = input(sprintf('Digite o valor para a posição (%d, 1) da matriz: ', j));
-    end                       
+%     for j = 1:2
+%         z(j) = input(sprintf('Digite o valor para a posição (%d, 1) da matriz: ', j));
+%     end                       
+    z(1) = medx(i);
+    z(2) = medy(i);
 
     K = P*Ht*(H*P*Ht + R)^(-1);                         %Predicao do ganho de Kalman
     Kt = transpose(K);                                  %Atualizacao da matriz transposta do ganho de Kalman                                  
@@ -63,3 +68,5 @@ scatter(medidoX,medidoY,'r')
 xlabel('Posicao X (m)');
 ylabel('Posicao Y (m)');
 title('Estimativa vs Medicao da posicao XY');
+legend('estimado','medido');
+grid on;

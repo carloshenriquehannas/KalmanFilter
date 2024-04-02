@@ -22,7 +22,7 @@ G = np.zeros((2, 1))                                        #Inicializacao da ma
 G[0, 0] = 0.5*(deltaT**2)
 G[1, 0] = deltaT
 
-#u = aceleracao + gravidade                                  #Inicializacao da matriz u 1x1 de controle
+#u = aceleracao + gravidade                                 #Inicializacao da matriz u 1x1 de controle
 u = 0
 
 #Predicao da covariancia: P = FP(F^T)+Q
@@ -38,7 +38,7 @@ Q = Q*(epsilon**2)
 
 R = [sigma**2]                                              #Inicializacao do vetor R
 
-H = np.zeros((1, 2))                                         #Inicializacao da matriz H
+H = np.zeros((1, 2))                                        #Inicializacao da matriz H
 H[0, 0] = 1
 
 I = np.zeros((2, 2))                                        #Inicializacao da matriz identidade I 2x2
@@ -58,7 +58,7 @@ velocidadeEstimada = []
 posicaoMedida = []
 
 #Laco de repeticao para medicao e estimativa j vezes
-for j in range(0, 30):
+for j in range(0, 8):
     x = F @ x + G * u  # Predicao da estimativa
     P = F @ P @ Ft + Q                                          #Predicao da covariancia
 
