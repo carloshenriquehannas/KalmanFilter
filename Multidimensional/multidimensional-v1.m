@@ -36,10 +36,7 @@ for i = 1:N
     x = F*x;                                            %Predicao da estimativa 
     P = F*P*Ft + Q;                                     %Predicao da covariancia
 
-    %Entrada da matriz z pelo usuario
-%     for j = 1:2
-%         z(j) = input(sprintf('Digite o valor para a posição (%d, 1) da matriz: ', j));
-%     end                       
+    %Entrada da matriz z pelo usuario                   
     z(1) = medx(i);
     z(2) = medy(i);
 
