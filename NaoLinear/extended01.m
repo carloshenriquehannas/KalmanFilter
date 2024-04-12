@@ -4,15 +4,15 @@ close all
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DADOS INICIAIS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-sigma_acel = 0.2;                                                          %Constante de desvio da aceleracao 
-sigma_medicao_posicao = 5;                                                 %Desvio da medicao de posicao
-sigma_medicao_angulo = 0.0087;                                             %Desvio da medicao do angulo
-delta_tempo = 1;                                                           %Variacao do tempo
+sigma_acel = 0.2;                                                        %Constante de desvio da aceleracao 
+sigma_medicao_posicao = 5;                                               %Desvio da medicao de posicao
+sigma_medicao_angulo = 0.0087;                                           %Desvio da medicao do angulo
+delta_tempo = 1;                                                         %Variacao do tempo
 
 %Matriz x 6x1 de estimativas
 x = zeros(6, 1); 
-x(1) = 400;                                                                %Posicao x inicial 
-x(4) = -300;                                                               %Posicao y inicial
+x(1) = 400;                                                              %Posicao x inicial 
+x(4) = -300;                                                             %Posicao y inicial
 
 %Matriz F e transposta Ft de transicao de estados. Linear neste exemplo
 F = [1, delta_tempo, (delta_tempo^2)/2, 0, 0, 0; 
@@ -47,7 +47,12 @@ I = eye(6);                                                                %Matr
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGORITMO DE KALMAN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-for i = 1:1:2
+N = 5;                                                                     %Quantidade de dados que serao computados
+
+estimados = zeros(6, N);                                                   %Matriz auxiliar de estimativa
+medidos = zeros(2, N);                                                     %Matriz auxiliar de medicao
+
+for i = 1:1:N
     x = F*x;                                                               %Predicao da estimativa
     
     P = F*P*Ft + Q;                                                        %Predicao da covariancia
@@ -65,7 +70,31 @@ for i = 1:1:2
     x = x + K*(z - H);                                                     %Atualizacao da estimativa
     
     P = (I - K*dH)*P*(transpose(I - K*dH)) + K*R*Kt;                       %Atualizacao da predicao
+
+    estimados(:,i) = x;                                                    %Matriz auxiliar recebe x, no tempo i
+    medidos(:,i) = z;                                                      %Matriz auxiliar recebe z, no tempo i
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PLOTAGEM DE GRAFICO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+estimadoX = estimados(1,:);                                                %Armazena as estimativas da posicao X
+estimadoY = estimados(4,:);                                                %Armazena as estimativas da posicao Y 
+medidoX = medidos(1,:);
+medidoY = medidos(2,:);
+
+%Plot do grafico de estimativa da posicao XY
+figure
+plot(estimadoX, estimadoY, 'b')
+hold on
+scatter(medidoX,medidoY,'r')
+
+xlabel('Posicao X (m)');
+ylabel('Posicao Y (m)');
+title('Estimativa vs Medicao da posicao XY');
+legend('estimado','medido');
+grid on;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
