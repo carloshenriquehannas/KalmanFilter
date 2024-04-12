@@ -1,6 +1,8 @@
-%Exemplo de sistema dinamico linear, mas com medicao nao-linear
+
 clear all
 close all
+
+%Sistema dinamico linear, mas com medicao nao-linear
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DADOS INICIAIS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -11,8 +13,8 @@ delta_tempo = 1;                                                         %Variac
 
 %Matriz x 6x1 de estimativas
 x = zeros(6, 1); 
-x(1) = 400;                                                              %Posicao x inicial 
-x(4) = -300;                                                             %Posicao y inicial
+%x(1) = 400;                                                              %Posicao x inicial 
+%x(4) = -300;                                                             %Posicao y inicial
 
 %Matriz F e transposta Ft de transicao de estados. Linear neste exemplo
 F = [1, delta_tempo, (delta_tempo^2)/2, 0, 0, 0; 
@@ -47,6 +49,7 @@ I = eye(6);                                                                %Matr
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGORITMO DE KALMAN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+load medidas_v1.mat                                                 
 N = 5;                                                                     %Quantidade de dados que serao computados
 
 estimados = zeros(6, N);                                                   %Matriz auxiliar de estimativa
@@ -84,11 +87,11 @@ estimadoY = estimados(4,:);                                                %Arma
 medidoX = medidos(1,:);
 medidoY = medidos(2,:);
 
-%Plot do grafico de estimativa da posicao XY
+%Plot do grafico da posicao XY
 figure
-plot(estimadoX, estimadoY, 'b')
+plot(estimadoX, estimadoY, 'b')                                            %Dados estimados
 hold on
-scatter(medidoX,medidoY,'r')
+scatter(medidoX,medidoY,'r')                                               %Dados medidos
 
 xlabel('Posicao X (m)');
 ylabel('Posicao Y (m)');
