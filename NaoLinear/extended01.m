@@ -6,15 +6,15 @@ close all
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DADOS INICIAIS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-sigma_acel = 0.2;                                                        %Constante de desvio da aceleracao 
-sigma_medicao_posicao = 5;                                               %Desvio da medicao de posicao
-sigma_medicao_angulo = 0.0087;                                           %Desvio da medicao do angulo
-delta_tempo = 1;                                                         %Variacao do tempo
+sigma_acel = 0.2;                                                          %Constante de desvio da aceleracao 
+sigma_medicao_posicao = 5;                                                 %Desvio da medicao de posicao
+sigma_medicao_angulo = 0.0087;                                             %Desvio da medicao do angulo
+delta_tempo = 1;                                                           %Variacao do tempo
 
 %Matriz x 6x1 de estimativas
 x = zeros(6, 1); 
-%x(1) = 400;                                                              %Posicao x inicial 
-%x(4) = -300;                                                             %Posicao y inicial
+x(1) = 400;                                                                %Posicao x inicial 
+x(4) = -300;                                                               %Posicao y inicial
 
 %Matriz F e transposta Ft de transicao de estados. Linear neste exemplo
 F = [1, delta_tempo, (delta_tempo^2)/2, 0, 0, 0; 
@@ -49,8 +49,8 @@ I = eye(6);                                                                %Matr
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGORITMO DE KALMAN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-load medidas_v1.mat                                                 
-N = 5;                                                                     %Quantidade de dados que serao computados
+load medidas_extended01.mat                                                
+N = length(med_r);                                                         %Quantidade de dados que serao computados
 
 estimados = zeros(6, N);                                                   %Matriz auxiliar de estimativa
 medidos = zeros(2, N);                                                     %Matriz auxiliar de medicao
@@ -61,8 +61,8 @@ for i = 1:1:N
     P = F*P*Ft + Q;                                                        %Predicao da covariancia
     
     %Entrada da medicao do usuario
-    z(1,1) = input(sprintf('Digite o valor da medicao z1: '));
-    z(2,1) = input(sprintf('Digite o valor da medicao z2: '));
+    z(1,1) = med_r(i);
+    z(2,1) = med_phi(i);
 
     %Funcao para calcular jacobiano de H
     [r, phi, H, dH, dHt] = jacobiano(x);
