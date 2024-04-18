@@ -61,8 +61,11 @@ for i = 1:1:N
     P = F*P*Ft + Q;                                                        %Predicao da covariancia
     
     %Entrada da medicao do usuario
-    z(1,1) = med_r(i);
-    z(2,1) = med_phi(i);
+    z = [med_r(i) ;
+         med_phi(i)]; 
+
+    %z(1,1) = input(sprintf('z1: '));
+    %z(2,1) = input(sprintf('z2: '));
 
     %Funcao para calcular jacobiano de H
     [r, phi, H, dH, dHt] = jacobiano(x);
@@ -73,6 +76,10 @@ for i = 1:1:N
     x = x + K*(z - H);                                                     %Atualizacao da estimativa
     
     P = (I - K*dH)*P*(transpose(I - K*dH)) + K*R*Kt;                       %Atualizacao da predicao
+
+    aux = z(1);
+    z(1) = aux*cos(z(2));
+    z(2) = aux*sin(z(2));
 
     estimados(:,i) = x;                                                    %Matriz auxiliar recebe x, no tempo i
     medidos(:,i) = z;                                                      %Matriz auxiliar recebe z, no tempo i
@@ -95,6 +102,7 @@ scatter(medidoX,medidoY,'r')                                               %Dado
 
 xlabel('Posicao X (m)');
 ylabel('Posicao Y (m)');
+axis('equal')
 title('Estimativa vs Medicao da posicao XY');
 legend('estimado','medido');
 grid on;
@@ -105,16 +113,17 @@ grid on;
 
 function [r, phi, H, dH, dHt] = jacobiano(x)
     %Calcula r e phi
-    r = x(1)^2 + x(4)^2;
+    r2 = x(1)^2 + x(4)^2;
+    r = sqrt(r2);
     phi = atan(x(4)/x(1));
 
     %Calcula H
-    H = [sqrt(r);
+    H = [r;
          phi];
 
     %Calcula dH: jacobiano de H
-    dH = [x(1)/sqrt(r) 0 0 x(4)/sqrt(r) 0 0 ;
-          -x(4)/r 0 0 x(1)/r 0 0];
+    dH = [x(1)/r 0 0 x(4)/r 0 0 ;
+          -x(4)/r2 0 0 x(1)/r2 0 0];
 
     %Matriz transposta do jacobiano de H
     dHt = transpose(dH);
