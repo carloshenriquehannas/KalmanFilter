@@ -51,6 +51,9 @@ I = eye(2);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGORITMO DE KALMAN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+estimados = zeros(2, 10);                                                   %Matriz auxiliar de estimativa
+medidos = zeros(1, 10);                                                     %Matriz auxiliar de medicao
+
 for i=1:1:10
 
     F = [x(1)+x(2)*delta_tempo ; 
@@ -76,7 +79,23 @@ for i=1:1:10
     
     P = (I - K*dH)*P*(transpose(I - K*dH)) + K*R*Kt;                       %Atualizacao da covariancia
 
+    estimados(:,i) = x;                                                    %Matriz auxiliar recebe x, no tempo i
+    medidos(:,i) = z;                                                      %Matriz auxiliar recebe z, no tempo i
+
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+estimado = estimados(1,:);                                                 %Armazena as estimativas da posicao X 
+medido = medidos(1,:);
 
+%Plot do grafico da posicao X
+figure
+plot(estimado, 'b')                                                        %Dados estimados
+% hold on
+% plot(medido, 'r')                                                          %Dados medidos
+% xlabel('Posicao X (m)');
+% axis('equal')
+% title('Estimativa vs Medicao da posicao do pendulo');
+% legend('estimado','medido');
+% grid on;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
