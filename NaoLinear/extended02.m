@@ -1,4 +1,5 @@
 close all
+clear all
 
 %Sistema dinamico nao-linear: Pendulo de corda L
 
@@ -90,12 +91,12 @@ medido = medidos(1,:);
 %Plot do grafico da posicao X
 figure
 plot(estimado, 'b')                                                        %Dados estimados
-% hold on
-% plot(medido, 'r')                                                          %Dados medidos
-% xlabel('Posicao X (m)');
-% axis('equal')
-% title('Estimativa vs Medicao da posicao do pendulo');
-% legend('estimado','medido');
-% grid on;
+hold on
+plot(medido, 'ro')                                                          %Dados medidos
+ylabel('Posicao X (m)');
+axis('equal')
+title('Estimativa vs Medicao da posicao do pendulo');
+legend('estimado','medido');
+grid on;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
