@@ -52,8 +52,11 @@ I = eye(2);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGORITMO DE KALMAN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-estimados = zeros(2, 10);                                                   %Matriz auxiliar de estimativa
-medidos = zeros(1, 10);                                                     %Matriz auxiliar de medicao
+load medidas_extended02.mat
+
+
+estimados = zeros(2, 10);                                                  %Matriz auxiliar de estimativa
+medidos = zeros(1, 10);                                                    %Matriz auxiliar de medicao
 
 for i=1:1:10
 
@@ -92,7 +95,7 @@ medido = medidos(1,:);
 figure
 plot(estimado, 'b')                                                        %Dados estimados
 hold on
-plot(medido, 'ro')                                                          %Dados medidos
+plot(medido, 'ro')                                                         %Dados medidos
 ylabel('Posicao X (m)');
 axis('equal')
 title('Estimativa vs Medicao da posicao do pendulo');
