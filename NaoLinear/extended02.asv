@@ -16,6 +16,22 @@ L = 0.5;                                                                   %Valo
 x = zeros(2, 1); 
 x(1) = 0.0873;
 
+%Matriz F, jacobiano de F (dF) e transposta de dF
+F = [x(1)+x(2)*delta_tempo ; 
+     x(2) - (g/L)*sin(x(1))*delta_tempo];
+
+dF = [1 delta_tempo ; 
+     (-g/L)*cos(x(1))*delta_tempo 1];
+
+dFt = transpose(dF);
+
+%Matriz H, jacobiano de H (dH) e transposta de dH
+H = L*sin(x(1)); 
+
+dH = [L*cos(x(1)) 0];
+
+dHt = transpose(dH);
+
 %Matriz P 2x2 de covariancia de posicao
 P = zeros(2,2);          
 for i = 1:1:2           
@@ -37,7 +53,7 @@ I = eye(2);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGORITMO DE KALMAN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 load medidas_extended02.mat
-N = length(med_ang);
+N = length(med_pos);
 
 
 estimados = zeros(2, N);                                                   %Matriz auxiliar de estimativa
@@ -45,19 +61,27 @@ medidos = zeros(1, N);                                                     %Matr
 
 for i=1:1:N
 
-    [F, dF, dFt] = f(x, g, L, delta_tempo);                                %Calculo da matriz F e jacobiano de F
+    F = [x(1)+x(2)*delta_tempo ; 
+         x(2) - (g/L)*sin(x(1))*delta_tempo];
+    dF = [1 delta_tempo ; 
+         (-g/L)*cos(x(1))*delta_tempo 1];
+    dFt = transpose(dF);
     
     x = F;                                                                 %Predicao da estimativa
+    
     P = dF*P*dFt + Q;                                                      %Predicao da covariancia
     
-    z = med_ang(i);                                                        %Dado de medicao do angulo                               
-
-    [H, dH, dHt] = h(x, L);                                                %Calculo da matriz H e jacobiano de H
+    z = med_pos(i);                                                        %Dado de medicao da posicao                                     
+    
+    H = L*sin(x(1));
+    dH = [L*cos(x(1)) 0];
+    dHt = transpose(dH);
     
     K = P*dHt*(dH*P*dHt + R)^(-1);                                         %Atualizacao do Ganho de Kalman
     Kt = transpose(K);
     
     x = x + K*(z - H);                                                     %Atualizacao da estimativa
+    
     P = (I - K*dH)*P*(transpose(I - K*dH)) + K*R*Kt;                       %Atualizacao da covariancia
 
     estimados(:,i) = x;                                                    %Matriz auxiliar recebe x, no tempo i
@@ -65,42 +89,18 @@ for i=1:1:N
 
 end
 
-estimado = estimados(1,:);                                                 %Armazena as estimativas do angulo 
-medido = medidos(1,:);                                                     %Armazena as medicoes do angulo
+estimado = estimados(1,:);                                                 %Armazena as estimativas da posicao X 
+medido = medidos(1,:);
 
-%Plot do grafico da posicao 
+%Plot do grafico da posicao X
 figure
 plot(estimado, 'b')                                                        %Dados estimados
 hold on
 plot(medido, 'ro')                                                         %Dados medidos
-ylabel('Ângulo (rad)');
-ylim([-0.15, 0.15])                                                        %Intervalo de limites do eixo y
-title('Estimativa vs Medicao do ângulo');
+ylabel('Posicao X (m)');
+ylim([-0.15, 0.2])
+title('Estimativa vs Medicao da posicao do pendulo');
 legend('estimado','medido');
 grid on;
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CALCULO DO JACOBIANO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%Calculo de F, jacobiano de F (dF)
-function [F, dF, dFt] = f(x, g, L, delta_tempo)
-    F = [x(1) + x(2) * delta_tempo ; 
-         x(2) - (g/L) * sin(x(1)) * delta_tempo];
-    
-    dF = [1 delta_tempo ; 
-         (-g/L) * cos(x(1)) * delta_tempo 1];
-
-    dFt = transpose(dF);
-end
-
-%Calculo de H, jacobiano de H (dH)
-function [H, dH, dHt] = h(x, L)
-    H = L * sin(x(1));
-
-    dH = [L * cos(x(1)) 0];
-
-    dHt = transpose(dH);
-end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
