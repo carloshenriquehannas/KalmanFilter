@@ -3,11 +3,17 @@ Estuda-se sobre os algoritmos de estimativas de dados, de sistemas estáticos ou
 
 ## Diretórios
 1. Unidimensional
-   - Códigos MATLAB e Python sobre estimativas de sistemas (estáticos e dinâmicos) e Filtro de Kalman em uma dimensão.
+   1. Códigos MATLAB e Python sobre estimativas de sistemas (estáticos e dinâmicos) e Filtro de Kalman em uma dimensão.
 
 2. Multidimensional
-   - Códigos MATLAB e Python sobre o Filtro de Kalman multidimensional.
+   1. Códigos MATLAB e Python sobre o Filtro de Kalman multidimensional.
+   2. Códigos principais:
+      - Multidimensional-v1: Movimento de um corpo nos eixos X e Y;
+      - Multidimensional-v2: Altura de um foguete em voo.
 
 3. Não-Linear
-   - Código MATLAB sobre o Filtro de Kalman não-linear.
+   1. Código MATLAB sobre o Filtro de Kalman não-linear.
+   2. Códigos principais:
+      - Extended01: Movimento de um corpo nos eixos X e Y (Sistema linear, com medições não-lineares);
+      - Extended02: Movimento de um pêndulo (Sistema não-linear).
    
