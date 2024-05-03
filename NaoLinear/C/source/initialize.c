@@ -1,9 +1,6 @@
 #include <stdio.h>
 
-#define ROWS 6                                                                                                          //Linhas das matrizes
-#define COLUMNS 6                                                                                                       //Colunas das matriZES
-#define X_COLUMNS 1                                                                                                     //Colunas da matriz x
-
+#include "initialize.h"
 
 void initialize_x(float x[ROWS][X_COLUMNS]){
     int i, j;
@@ -90,25 +87,23 @@ initialize_Q(float Q[ROWS][COLUMNS], float delta_tempo, float sigma_acel){
 
 }
 
-int main() {
-    float sigma_acel = 0.2;                                                                                             //Constante de desvio da aceleracao
-    float sigma_medicao_posicao = 5;                                                                                    //Desvio da medicao de posicao
-    float sigma_medicao_angulo = 0.0087;                                                                                //Desvio da medicao do angulo
-    float delta_tempo = 1;                                                                                              //Variacao do tempo
+initialize_R(float R[R_ROWS][R_COLUMNS], float sigma_medicao_posicao, float sigma_medicao_angulo){
+    R[0][0] = sigma_medicao_posicao * sigma_medicao_posicao;
+    R[0][1] = 0;
+    R[1][0] = 0;
+    R[1][1] = sigma_medicao_angulo * sigma_medicao_angulo;
 
-    //Matriz x de estimativas
-    float x[ROWS][X_COLUMNS];                                                                                           //Matriz x de estimativas
-    initialize_x(x);                                                                                                    //Inicializa a matriz x com os valores
+}
 
-    float F[ROWS][COLUMNS];                                                                                             //Matriz F de transicao de estados
-    initialize_F(F, delta_tempo);                                                                                       //Inicializa a matriz F com os valores
-    //FAZER transpose(F)
+initialize_I(float I[ROWS][COLUMNS]){
+    int i, j;
 
-    float P[ROWS][COLUMNS];                                                                                             //Matriz P de covariancia
-    initialize_P(P);                                                                                                    //Inicializa a matriz P com os valores
-
-    float Q[ROWS][COLUMNS];                                                                                             //Matriz Q de ruido da covariancia
-    initialize_Q(Q, delta_tempo, sigma_acel);                                                                           //Inicializa a matriz Q com os valores
-
-    return 0;
+    for(i = 0; i < ROWS; i++){                                                                                          //Percorre a linha da matriz
+        for(j = 0; j < COLUMNS; j++){                                                                                   //Percorre a coluna da matriz
+            I[i][j] = 0;                                                                                                //Preenche a matriz com zeros
+            if(i == j){
+                I[i][j] = 1;                                                                                            //Preenche diagonal principal com 1
+            }
+        }
+    }
 }

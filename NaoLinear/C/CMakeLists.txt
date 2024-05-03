@@ -3,4 +3,4 @@ project(NaoLinear C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(NaoLinear extended01.c)
+add_executable(NaoLinear extended01.c initialize.c initialize.h)

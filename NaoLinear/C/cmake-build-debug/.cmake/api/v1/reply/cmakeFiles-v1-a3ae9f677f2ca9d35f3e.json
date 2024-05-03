@@ -105,8 +105,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "C:/Users/carlo/OneDrive/Documentos/GitHub/KalmanFilter/NaoLinear/cmake-build-debug",
-		"source" : "C:/Users/carlo/OneDrive/Documentos/GitHub/KalmanFilter/NaoLinear"
+		"build" : "C:/Users/carlo/OneDrive/Documentos/GitHub/KalmanFilter/NaoLinear/C/cmake-build-debug",
+		"source" : "C:/Users/carlo/OneDrive/Documentos/GitHub/KalmanFilter/NaoLinear/C"
 	},
 	"version" : 
 	{

@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "NaoLinear::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-NaoLinear-Debug-aac12971b44993282925.json",
+					"jsonFile" : "target-NaoLinear-Debug-8a115fee0b51519f9bc6.json",
 					"name" : "NaoLinear",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/carlo/OneDrive/Documentos/GitHub/KalmanFilter/NaoLinear/cmake-build-debug",
-		"source" : "C:/Users/carlo/OneDrive/Documentos/GitHub/KalmanFilter/NaoLinear"
+		"build" : "C:/Users/carlo/OneDrive/Documentos/GitHub/KalmanFilter/NaoLinear/C/cmake-build-debug",
+		"source" : "C:/Users/carlo/OneDrive/Documentos/GitHub/KalmanFilter/NaoLinear/C"
 	},
 	"version" : 
 	{
