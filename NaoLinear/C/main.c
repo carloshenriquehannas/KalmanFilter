@@ -12,8 +12,9 @@ int main() {
     initialize_x(x);                                                                                                    //Inicializa a matriz x com os valores
 
     float F[ROWS][COLUMNS];                                                                                             //Matriz F de transicao de estados
+    float Ft[COLUMNS][ROWS];                                                                                            //Matriz transposta de F
     initialize_F(F, delta_tempo);                                                                                       //Inicializa a matriz F com os valores
-    //FAZER transpose(F)
+    transpose(F, Ft);                                                                                                   //Inicializa a matriz Ft (transposta de F)
 
     float P[ROWS][COLUMNS];                                                                                             //Matriz P de covariancia
     initialize_P(P);                                                                                                    //Inicializa a matriz P com os valores
@@ -27,11 +28,5 @@ int main() {
     float I[ROWS][COLUMNS];                                                                                             //Matriz I identidade
     initialize_I(I);                                                                                                    //Inicializa a matriz I com os valores
 
-    for(int i = 0; i < ROWS; i++){
-        for(int j = 0; j < COLUMNS; j++){
-            printf("%f\t", Q[i][j]);
-        }
-        printf("\n");
-    }
     return 0;
 }

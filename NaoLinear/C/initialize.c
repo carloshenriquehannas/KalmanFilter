@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <math.h>
 
 #include "initialize.h"
 
@@ -32,8 +32,8 @@ void initialize_F(float F[ROWS][COLUMNS], float delta_tempo){
     F[1][2] = delta_tempo;
     F[3][4] = delta_tempo;
     F[4][5] = delta_tempo;
-    F[0][2] = (delta_tempo*delta_tempo)/2;
-    F[3][5] = (delta_tempo*delta_tempo)/2;
+    F[0][2] = (pow(delta_tempo, 2))/2;
+    F[3][5] = (pow(delta_tempo, 2))/2;
 
 }
 
@@ -60,38 +60,38 @@ initialize_Q(float Q[ROWS][COLUMNS], float delta_tempo, float sigma_acel){
         }
     }
 
-    Q[0][0] = (delta_tempo * delta_tempo * delta_tempo * delta_tempo) / 4;
-    Q[0][1] = (delta_tempo * delta_tempo * delta_tempo) / 2;
-    Q[0][2] = (delta_tempo * delta_tempo) / 2;
-    Q[1][0] = (delta_tempo * delta_tempo * delta_tempo) / 2;
-    Q[1][1] = (delta_tempo * delta_tempo);
+    Q[0][0] = (pow(delta_tempo, 4)) / 4;
+    Q[0][1] = (pow(delta_tempo, 3)) / 2;
+    Q[0][2] = (pow(delta_tempo, 2)) / 2;
+    Q[1][0] = (pow(delta_tempo, 3)) / 2;
+    Q[1][1] = pow(delta_tempo, 2);
     Q[1][2] = delta_tempo;
-    Q[2][0] = (delta_tempo * delta_tempo) / 2;
+    Q[2][0] = (pow(delta_tempo, 2)) / 2;
     Q[2][1] = delta_tempo;
     Q[2][2] = 1;
-    Q[3][3] = (delta_tempo * delta_tempo * delta_tempo * delta_tempo) / 4;
-    Q[3][4] = (delta_tempo * delta_tempo * delta_tempo) / 2;
-    Q[3][5] = (delta_tempo * delta_tempo) / 2;
-    Q[4][3] = (delta_tempo * delta_tempo * delta_tempo) / 2;
-    Q[4][4] = (delta_tempo * delta_tempo);
+    Q[3][3] = (pow(delta_tempo, 4)) / 4;
+    Q[3][4] = (pow(delta_tempo, 3)) / 2;
+    Q[3][5] = (pow(delta_tempo, 2)) / 2;
+    Q[4][3] = (pow(delta_tempo, 3)) / 2;
+    Q[4][4] = pow(delta_tempo, 2);
     Q[4][5] = delta_tempo;
-    Q[5][3] = (delta_tempo * delta_tempo) / 2;
+    Q[5][3] = (pow(delta_tempo, 2)) / 2;
     Q[5][4] = delta_tempo;
     Q[5][5] = 1;
 
     for (i = 0; i < ROWS; i++) {
         for (j = 0; j < COLUMNS; j++) {
-            Q[i][j] *= (sigma_acel * sigma_acel);                                                                       //Multiplica Q por (sigma_acel)^2
+            Q[i][j] *= (pow(sigma_acel, 2));                                                                            //Multiplica Q por (sigma_acel)^2
         }
     }
 
 }
 
 initialize_R(float R[R_ROWS][R_COLUMNS], float sigma_medicao_posicao, float sigma_medicao_angulo){
-    R[0][0] = sigma_medicao_posicao * sigma_medicao_posicao;
+    R[0][0] = pow(sigma_medicao_posicao, 2);
     R[0][1] = 0;
     R[1][0] = 0;
-    R[1][1] = sigma_medicao_angulo * sigma_medicao_angulo;
+    R[1][1] = pow(sigma_medicao_angulo, 2);
 
 }
 
@@ -104,6 +104,16 @@ initialize_I(float I[ROWS][COLUMNS]){
             if(i == j){
                 I[i][j] = 1;                                                                                            //Preenche diagonal principal com 1
             }
+        }
+    }
+}
+
+void transpose(float principal[ROWS][COLUMNS], float transpose[COLUMNS][ROWS]){
+    int i, j;
+
+    for(i = 0; i < ROWS; i++){
+        for(j = 0; j < COLUMNS; j++){
+            transpose[j][i] = principal[i][j];
         }
     }
 }

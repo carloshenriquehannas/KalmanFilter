@@ -1,13 +1,5 @@
 # ninja log v5
-5	276	7364663942535891	build.ninja	5e80fb44a6474c08
-5	202	7364656202623411	CMakeFiles/NaoLinear.dir/extended01.c.obj	27e38438d41d739a
-203	534	7364656205616271	NaoLinear.exe	b94e1e6867038215
-3	236	7364666689687778	CMakeFiles/NaoLinear.dir/extended01.c.obj	27e38438d41d739a
-19	242	7364666689739622	CMakeFiles/NaoLinear.dir/initialize.c.obj	44ee4b6b5afc86bf
-245	694	7364666692742792	NaoLinear.exe	b7c115867ec295ed
-3	174	7364666803659889	CMakeFiles/NaoLinear.dir/extended01.c.obj	27e38438d41d739a
-174	418	7364666805685658	NaoLinear.exe	b7c115867ec295ed
-3	168	7364667042336212	CMakeFiles/NaoLinear.dir/extended01.c.obj	27e38438d41d739a
-171	411	7364667044435442	NaoLinear.exe	b7c115867ec295ed
-5	270	7364667124737210	CMakeFiles/NaoLinear.dir/extended01.c.obj	27e38438d41d739a
-270	545	7364667127038510	NaoLinear.exe	b7c115867ec295ed
+5	276	7364705362498333	build.ninja	5e80fb44a6474c08
+2	151	7364691149544192	CMakeFiles/NaoLinear.dir/main.c.obj	3feeee8784f870a8
+153	449	7364691152182556	NaoLinear.exe	a2ef85bbcbfddbbb
+3	142	7364685782856621	CMakeFiles/NaoLinear.dir/initialize.c.obj	44ee4b6b5afc86bf
