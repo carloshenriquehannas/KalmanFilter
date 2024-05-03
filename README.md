@@ -12,7 +12,7 @@ Estuda-se sobre os algoritmos de estimativas de dados, de sistemas estáticos ou
       - Multidimensional-v2: Altura de um foguete em voo.
 
 3. Não-Linear
-   1. Código MATLAB sobre o Filtro de Kalman não-linear.
+   1. Código MATLAB e C sobre o Filtro de Kalman não-linear.
    2. Códigos principais:
       - Extended01: Movimento de um corpo nos eixos X e Y (Sistema linear, com medições não-lineares);
       - Extended02: Movimento de um pêndulo (Sistema não-linear).
