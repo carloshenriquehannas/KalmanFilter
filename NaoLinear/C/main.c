@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "initialize.h"
+#include "FKE.h"
 
 int main() {
     float sigma_acel = 0.2;                                                                                             //Constante de desvio da aceleracao
@@ -27,6 +28,8 @@ int main() {
 
     float I[ROWS][COLUMNS];                                                                                             //Matriz I identidade
     initialize_I(I);                                                                                                    //Inicializa a matriz I com os valores
+
+    extended_kalman(x, F, P, Ft, Q);                                                                                    //Algoritmo de Kalman
 
     return 0;
 }

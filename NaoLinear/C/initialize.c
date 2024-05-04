@@ -2,6 +2,7 @@
 
 #include "initialize.h"
 
+//Inicializa a matriz x
 void initialize_x(float x[ROWS][X_COLUMNS]){
     int i, j;
 
@@ -16,6 +17,7 @@ void initialize_x(float x[ROWS][X_COLUMNS]){
 
 }
 
+//Inicializa a matriz F
 void initialize_F(float F[ROWS][COLUMNS], float delta_tempo){
     int i, j;
 
@@ -37,6 +39,7 @@ void initialize_F(float F[ROWS][COLUMNS], float delta_tempo){
 
 }
 
+//Inicializa a matriz P
 void initialize_P(float P[ROWS][COLUMNS]){
     int i, j;
 
@@ -51,6 +54,7 @@ void initialize_P(float P[ROWS][COLUMNS]){
 
 }
 
+//Inicializa a matriz Q
 initialize_Q(float Q[ROWS][COLUMNS], float delta_tempo, float sigma_acel){
     int i, j;
 
@@ -87,6 +91,7 @@ initialize_Q(float Q[ROWS][COLUMNS], float delta_tempo, float sigma_acel){
 
 }
 
+//Inicializa a matriz R
 initialize_R(float R[R_ROWS][R_COLUMNS], float sigma_medicao_posicao, float sigma_medicao_angulo){
     R[0][0] = pow(sigma_medicao_posicao, 2);
     R[0][1] = 0;
@@ -95,11 +100,12 @@ initialize_R(float R[R_ROWS][R_COLUMNS], float sigma_medicao_posicao, float sigm
 
 }
 
+//Inicializa a matriz I
 initialize_I(float I[ROWS][COLUMNS]){
     int i, j;
 
-    for(i = 0; i < ROWS; i++){                                                                                          //Percorre a linha da matriz
-        for(j = 0; j < COLUMNS; j++){                                                                                   //Percorre a coluna da matriz
+    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz
+        for(j = 0; j < COLUMNS; j++){                                                                                   //Percorre colunas da matriz
             I[i][j] = 0;                                                                                                //Preenche a matriz com zeros
             if(i == j){
                 I[i][j] = 1;                                                                                            //Preenche diagonal principal com 1
@@ -108,12 +114,13 @@ initialize_I(float I[ROWS][COLUMNS]){
     }
 }
 
+//Realiza a transposicao de matriz
 void transpose(float principal[ROWS][COLUMNS], float transpose[COLUMNS][ROWS]){
     int i, j;
 
-    for(i = 0; i < ROWS; i++){
-        for(j = 0; j < COLUMNS; j++){
-            transpose[j][i] = principal[i][j];
+    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz
+        for(j = 0; j < COLUMNS; j++){                                                                                   //Percorre colunas da matriz
+            transpose[j][i] = principal[i][j];                                                                          //Transpoe linha por coluna
         }
     }
 }
