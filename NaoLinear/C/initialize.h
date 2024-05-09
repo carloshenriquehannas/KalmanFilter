@@ -5,6 +5,7 @@
 #define COLUMNS 6                                                                                                       //Colunas das matrizes
 #define H_ROWS 2                                                                                                        //Coluna da matriz H
 #define H_COLUMNS 1                                                                                                     //Linha da matriz H
+#define dHt_COLUMNS 2                                                                                                   //Coluna da matriz dHt
 #define R_ROWS 2                                                                                                        //Linha da matriz R
 #define R_COLUMNS 2                                                                                                     //Coluna da matriz R
 #define X_COLUMNS 1                                                                                                     //Coluna da matriz x

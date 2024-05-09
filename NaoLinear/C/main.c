@@ -30,7 +30,7 @@ int main() {
     float I[ROWS][COLUMNS];                                                                                             //Matriz I identidade
     initialize_I(I);                                                                                                    //Inicializa a matriz I com os valores
 
-    extended_kalman(x, F, P, Ft, Q);                                                                                    //Algoritmo de Kalman
+    extended_kalman(x, F, P, Ft, Q, R);                                                                                    //Algoritmo de Kalman
 
     return 0;
 }
