@@ -67,6 +67,12 @@ build CMakeFiles/NaoLinear.dir/FKE.c.obj: C_COMPILER__NaoLinear_Debug C$:/Users/
   OBJECT_DIR = CMakeFiles\NaoLinear.dir
   OBJECT_FILE_DIR = CMakeFiles\NaoLinear.dir
 
+build CMakeFiles/NaoLinear.dir/functions.c.obj: C_COMPILER__NaoLinear_Debug C$:/Users/carlo/OneDrive/Documentos/GitHub/KalmanFilter/NaoLinear/C/functions.c || cmake_object_order_depends_target_NaoLinear
+  DEP_FILE = CMakeFiles\NaoLinear.dir\functions.c.obj.d
+  FLAGS = -g -std=gnu99
+  OBJECT_DIR = CMakeFiles\NaoLinear.dir
+  OBJECT_FILE_DIR = CMakeFiles\NaoLinear.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target NaoLinear
@@ -75,7 +81,7 @@ build CMakeFiles/NaoLinear.dir/FKE.c.obj: C_COMPILER__NaoLinear_Debug C$:/Users/
 #############################################
 # Link the executable NaoLinear.exe
 
-build NaoLinear.exe: C_EXECUTABLE_LINKER__NaoLinear_Debug CMakeFiles/NaoLinear.dir/main.c.obj CMakeFiles/NaoLinear.dir/initialize.c.obj CMakeFiles/NaoLinear.dir/FKE.c.obj
+build NaoLinear.exe: C_EXECUTABLE_LINKER__NaoLinear_Debug CMakeFiles/NaoLinear.dir/main.c.obj CMakeFiles/NaoLinear.dir/initialize.c.obj CMakeFiles/NaoLinear.dir/FKE.c.obj CMakeFiles/NaoLinear.dir/functions.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\NaoLinear.dir

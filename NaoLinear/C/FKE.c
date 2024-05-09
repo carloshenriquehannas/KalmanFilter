@@ -1,36 +1,25 @@
 #include <stdio.h>
+#include <math.h>
 
 #include "initialize.h"
+#include "functions.h"
 #include "FKE.h"
 
-//Funcao para fazer a multiplicacao de matrizes, tendo matrizes quadradas
-void multiplica_matriz_quadrada(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][COLUMNS], float resultado[ROWS][COLUMNS]){
-    int i,j,k;
+void jacobiano(float x_res[ROWS][X_COLUMNS]){
+    float r_aux, r, phi;
+    float H[H_ROWS][H_COLUMNS];                                                                                         //Matriz H de observacao
+    float dH[H_ROWS][COLUMNS];                                                                                          //Matriz jacobiana dH (jacobiano de H)
+    float dHt[COLUMNS][H_ROWS];                                                                                         //Matriz transposta de dH
 
-    //Calcula a multiplicacao das matrizes
-    for(i = 0; i < ROWS; i++){
-        for(j = 0; j < COLUMNS; j++){
-            resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero
-            for(k = 0; k < COLUMNS; k++){                                                                               //Percorre colunas da matriz A
-                resultado[i][j] += matrizA[i][k] * matrizB[k][j];                                                       //Armazena o elemento da multiplicacao na matriz resultado
-            }
-        }
-    }
-}
+    r_aux = pow(x_res[0][0], 2) + pow(x_res[3][0], 2);
+    r = sqrt(r_aux);
 
-//Funcao para fazer a multiplicacao de matrizes, tendo uma matriz coluna
-void multiplica_matriz_coluna(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][X_COLUMNS], float resultado[ROWS][X_COLUMNS]){
-    int i, j, k;
+    phi = atan(x_res[3][0] / x_res[0][0]);
 
-    //Calcula a multiplicacao das matrizes
-    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas das matrizes
-        for(j = 0; j < X_COLUMNS; j++){                                                                                 //Percorre colunas da matriz B
-            resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero
-            for(k = 0; k < COLUMNS; k++){                                                                               //Percorre colunas da matriz A
-                resultado[i][j] += matrizA[i][k] * matrizB[k][j];                                                       //Armazena o elemento da multiplicacao na matriz resultado
-            }
-        }
-    }
+    initialize_H(H, r, phi);                                                                                            //Inicializa a matriz H de observacao
+    initialize_dH(dH, x_res, r, r_aux);                                                                                 //Inicializa a matriz dH (jacobiano)
+    transpose_H(dH, dHt);                                                                                               //Inicializa a matriz tranposta de dH: dHt
+
 }
 
 void extended_kalman(float x[ROWS][X_COLUMNS], float F[ROWS][COLUMNS], float P[ROWS][COLUMNS], float Ft[COLUMNS][ROWS], float Q[ROWS][COLUMNS]){
@@ -43,13 +32,8 @@ void extended_kalman(float x[ROWS][X_COLUMNS], float F[ROWS][COLUMNS], float P[R
     //Predicao da covariancia: P = F * P * Ft + Q
     multiplica_matriz_quadrada(P, Ft, P_aux);                                                                           //P_aux = P * Ft
     multiplica_matriz_quadrada(F, P_aux, P);                                                                            //P = F * P_aux
-    P[ROWS][COLUMNS] = P[ROWS][COLUMNS] + Q[ROWS][COLUMNS];
+    P[ROWS][COLUMNS] = P[ROWS][COLUMNS] + Q[ROWS][COLUMNS];                                                             //P = P + Q
 
-    /*for(int i = 0; i < ROWS; i++){
-        for(int j = 0; j < COLUMNS; j++){
-            printf("%f\t", P[i][j]);
-        }
-        printf("\n");
-    }*/
+    jacobiano(x_res);
 
 }

@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h>
 
 #include "initialize.h"
 
@@ -55,7 +56,7 @@ void initialize_P(float P[ROWS][COLUMNS]){
 }
 
 //Inicializa a matriz Q
-initialize_Q(float Q[ROWS][COLUMNS], float delta_tempo, float sigma_acel){
+void initialize_Q(float Q[ROWS][COLUMNS], float delta_tempo, float sigma_acel){
     int i, j;
 
     for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz
@@ -92,7 +93,7 @@ initialize_Q(float Q[ROWS][COLUMNS], float delta_tempo, float sigma_acel){
 }
 
 //Inicializa a matriz R
-initialize_R(float R[R_ROWS][R_COLUMNS], float sigma_medicao_posicao, float sigma_medicao_angulo){
+void initialize_R(float R[R_ROWS][R_COLUMNS], float sigma_medicao_posicao, float sigma_medicao_angulo){
     R[0][0] = pow(sigma_medicao_posicao, 2);
     R[0][1] = 0;
     R[1][0] = 0;
@@ -101,7 +102,7 @@ initialize_R(float R[R_ROWS][R_COLUMNS], float sigma_medicao_posicao, float sigm
 }
 
 //Inicializa a matriz I
-initialize_I(float I[ROWS][COLUMNS]){
+void initialize_I(float I[ROWS][COLUMNS]){
     int i, j;
 
     for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz
@@ -114,13 +115,26 @@ initialize_I(float I[ROWS][COLUMNS]){
     }
 }
 
-//Realiza a transposicao de matriz
-void transpose(float principal[ROWS][COLUMNS], float transpose[COLUMNS][ROWS]){
-    int i, j;
+//Inicializa a matriz H
+void initialize_H(float H[H_ROWS][H_COLUMNS], float r, float phi){
+    H[0][0] = r;
+    H[1][0] = phi;
 
-    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz
-        for(j = 0; j < COLUMNS; j++){                                                                                   //Percorre colunas da matriz
-            transpose[j][i] = principal[i][j];                                                                          //Transpoe linha por coluna
-        }
-    }
+}
+
+//Inicializa a matriz dH: jacobiano de H
+void initialize_dH(float dH[H_ROWS][COLUMNS], float x_res[ROWS][X_COLUMNS], float r, float r_aux){
+    dH[0][0] = x_res[0][0] / r;
+    dH[0][1] = 0;
+    dH[0][2] = 0;
+    dH[0][3] = x_res[3][0] / r;
+    dH[0][4] = 0;
+    dH[0][5] = 0;
+    dH[1][0] = - x_res[3][0] / r_aux;
+    dH[1][1] = 0;
+    dH[1][2] = 0;
+    dH[1][3] = x_res[0][0] / r_aux;
+    dH[1][4] = 0;
+    dH[1][5] = 0;
+
 }

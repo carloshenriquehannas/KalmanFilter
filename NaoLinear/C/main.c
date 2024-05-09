@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "initialize.h"
+#include "functions.h"
 #include "FKE.h"
 
 int main() {
@@ -15,7 +16,7 @@ int main() {
     float F[ROWS][COLUMNS];                                                                                             //Matriz F de transicao de estados
     float Ft[COLUMNS][ROWS];                                                                                            //Matriz transposta de F
     initialize_F(F, delta_tempo);                                                                                       //Inicializa a matriz F com os valores
-    transpose(F, Ft);                                                                                                   //Inicializa a matriz Ft (transposta de F)
+    transpose_quadrada(F, Ft);                                                                                          //Inicializa a matriz Ft (transposta de F)
 
     float P[ROWS][COLUMNS];                                                                                             //Matriz P de covariancia
     initialize_P(P);                                                                                                    //Inicializa a matriz P com os valores
