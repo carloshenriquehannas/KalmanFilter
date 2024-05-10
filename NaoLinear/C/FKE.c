@@ -31,22 +31,30 @@ void extended_kalman(float x[ROWS][X_COLUMNS], float F[ROWS][COLUMNS], float P[R
     float inov[H_ROWS][dHt_COLUMNS];                                                                                    //Matriz auxiliar pra calcular ganho
     float inov_res[H_ROWS][dHt_COLUMNS];
     float inov_aux[ROWS][dHt_COLUMNS];
+    float K_aux[COLUMNS][dHt_COLUMNS];
 
     //Predicao da estimativa: x_res = F * x
     multiplica_matriz_coluna(F, x, x_res);
 
     //Predicao da covariancia: P_res = F * P * Ft + Q
-    multiplica_matriz_quadrada(P, Ft, P_aux);                                                                           //P_aux = P * Ft
-    multiplica_matriz_quadrada(F, P_aux, P);                                                                            //P = F * P_aux
-    soma_matriz_quadrada01(P, Q, P_res);                                                                                //P_res = P + Q
+    multiplica_matriz_quadrada_6x6(P, Ft, P_aux);                                                                       //P_aux = P * Ft
+    multiplica_matriz_quadrada_6x6(F, P_aux, P);                                                                        //P = F * P_aux
+    soma_matriz_quadrada_6x6(P, Q, P_res);                                                                              //P_res = P + Q
 
     jacobiano(x_res, H, dH, dHt);                                                                                       //Calculo do jacobiano
 
     //Atualizacao do ganho de Kalman: K = P*dHt*(dH*P*dHt + R)^(-1);
     multiplica_matriz_auxiliar01(P, dHt, inov_aux);                                                                     //inov_aux = P * dHt
     multiplica_matriz_auxiliar02(dH, inov_aux, inov);                                                                   //inov = dH * inov_aux
-    soma_matriz_quadrada02(inov, R, inov_res);                                                                          //inov_res = inov + R
+    soma_matriz_quadrada_2x2(inov, R, inov_res);                                                                        //inov_res = inov + R
+    inversa_matriz_2x2(inov_res);                                                                                       //inov_res = (inov_res)^(-1)
+    //multiplica_matriz_auxiliar03(dHt, inov_res, K_aux); - ARRUMAR ISSO QUE ESTA ERRADO
 
-    //FAZER inov_res^(-1)
+    for(int i = 0; i < COLUMNS; i++){
+        for(int j = 0; j < dHt_COLUMNS; j++){
+            printf("%f\t", K_aux[i][j]);
+        }
+        printf("\n");
+    }
 
 }
