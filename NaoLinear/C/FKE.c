@@ -5,6 +5,34 @@
 #include "functions.h"
 #include "FKE.h"
 
+//Funcao para atualizar a estimativa do estado: x = x + K*(z - H)
+void estimate_state(float z[Z_ROWS][Z_COLUMNS], float H[H_ROWS][H_COLUMNS], float K[ROWS][dHt_COLUMNS]){
+    int i;
+    float aux[Z_ROWS][Z_COLUMNS];
+    float aux_res[ROWS][Z_COLUMNS];
+
+    //aux = z - H
+    for(i = 0; i < Z_ROWS; i++){
+        aux[i][0]  = 0;
+        aux[i][0] = z[i][0] - H[i][0];
+    }
+
+    //aux_res = K * aux
+    multiplica_matriz_auxiliar04(K, aux, aux_res);
+
+    /*for(i = 0; i < ROWS; i++){
+        for(int j = 0; j < Z_COLUMNS; j++){
+            printf("%f\t", aux_res[i][j]);
+        }
+        printf("\n");
+    }*/
+
+}
+
+//Funcao para atualizar a estimativa da predicao
+//estimate_predict(){}
+
+
 //Funcao para calcular o jacobiano de H
 void jacobiano(float x_res[ROWS][X_COLUMNS], float H[H_ROWS][H_COLUMNS], float dH[H_ROWS][COLUMNS], float dHt[COLUMNS][H_ROWS]){
     float r_aux, r, phi;
@@ -25,6 +53,7 @@ void extended_kalman(float x[ROWS][X_COLUMNS], float F[ROWS][COLUMNS], float P[R
     float P_res[ROWS][COLUMNS];                                                                                         //Matriz de resultada para predicao
     float P_aux[ROWS][COLUMNS];                                                                                         //Matriz auxiliar para predicao
     float x_res[ROWS][X_COLUMNS];                                                                                       //Matriz de resultado para estimativa
+    float z[Z_ROWS][Z_COLUMNS];                                                                                         //Matriz z de medicoes
     float H[H_ROWS][H_COLUMNS];                                                                                         //Matriz H de observacao
     float dH[H_ROWS][COLUMNS];                                                                                          //Matriz jacobiana dH (jacobiano de H)
     float dHt[COLUMNS][H_ROWS];                                                                                         //Matriz transposta de dH
@@ -53,7 +82,15 @@ void extended_kalman(float x[ROWS][X_COLUMNS], float F[ROWS][COLUMNS], float P[R
     multiplica_matriz_auxiliar03(dHt, inov_res, K_aux);                                                                 //K_aux = dHt * inov_res
     multiplica_matriz_auxiliar01(P, K_aux, K);                                                                          //K = P * K_aux
 
-    transpose_matriz_6x2(K, Kt);                                                                                         //Matriz Kt (transposta de K)
+    transpose_matriz_6x2(K, Kt);                                                                                        //Matriz Kt (transposta de K)
+
+    /*INICIALIZAR A MATRIZ Z COM DADO*/
+        z[0][0] = 501.1395;
+        z[1][0] = -0.9379;
+
+    estimate_state(z, H, K);                                                                                            //Atualizacao da estados: x = x + K*(z - H)
+
+    //estimate_predict();
 
     /*for(int i = 0; i < dHt_COLUMNS; i++){
         for(int j = 0; j < ROWS; j++){

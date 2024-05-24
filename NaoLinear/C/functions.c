@@ -112,6 +112,22 @@ void multiplica_matriz_auxiliar03(float matrizA[COLUMNS][H_ROWS], float matrizB[
 
 }
 
+//Funcao para fazer a multiplicacao de matrizes, tendo matrizes 6x2 e 2x1
+void multiplica_matriz_auxiliar04(float matrizA[ROWS][dHt_COLUMNS], float matrizB[Z_ROWS][Z_COLUMNS], float resultado[ROWS][Z_COLUMNS]){
+    int i, j, k;
+
+    //Calcula a multiplicacao das matrizes
+    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz A
+        for(j = 0; j < Z_COLUMNS; j++){                                                                                 //Percorre colunas da matriz B
+            resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero, para nao ter lixo
+            for(k = 0; k < dHt_COLUMNS; k++){                                                                           //Percorre colunas da matriz A
+                resultado[i][j] += matrizA[i][k] * matrizB[k][j];                                                       //Armazena o elemento da multiplicacao na matriz resultado
+            }
+        }
+    }
+
+}
+
 //Realiza a transposicao de matriz quadrada 6x6
 void transpose_matriz_6x6(float principal[ROWS][COLUMNS], float transposta[COLUMNS][ROWS]){
     int i, j;
