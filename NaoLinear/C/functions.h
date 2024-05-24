@@ -9,7 +9,8 @@ void multiplica_matriz_coluna(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][
 void multiplica_matriz_auxiliar01(float matrizA[ROWS][COLUMNS], float matrizB[COLUMNS][H_ROWS], float resultado[ROWS][H_ROWS]);                                     //Multiplicacao de matrizes (auxiliar 01)
 void multiplica_matriz_auxiliar02(float matrizA[H_ROWS][COLUMNS], float matrizB[ROWS][H_ROWS], float resultado[H_ROWS][H_ROWS]);                                    //Multiplicacao de matrizes (auxiliar 02)
 void multiplica_matriz_auxiliar03(float matrizA[COLUMNS][H_ROWS], float matrizB[H_ROWS][dHt_COLUMNS], float resultado[COLUMNS][dHt_COLUMNS]);                       //Multiplicacao de matrizes (auxiliar 03)
-void transpose_quadrada_6x6(float principal[ROWS][COLUMNS], float transposta[COLUMNS][ROWS]);                                                                       //Calcula matriz transposta (matriz quadrada)
+void transpose_matriz_6x6(float principal[ROWS][COLUMNS], float transposta[COLUMNS][ROWS]);                                                                        //Calcula matriz transposta (matriz quadrada)
+void transpose_matriz_6x2(float principal[ROWS][dHt_COLUMNS], float transposta[dHt_COLUMNS][ROWS]);
 void transpose_H(float principal[H_ROWS][COLUMNS], float transposta[COLUMNS][H_ROWS]);                                                                              //Calcula matriz transposta (da matriz H)
 void inversa_matriz_2x2(float inversa[H_ROWS][dHt_COLUMNS]);                                                                                                        //Calcula a matriz inversa (matriz 2x2)
 

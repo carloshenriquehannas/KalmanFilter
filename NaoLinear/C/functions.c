@@ -9,7 +9,7 @@ void soma_matriz_quadrada_6x6(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][
     int i, j, k;
 
     //Calcula a soma das matrizes
-    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas das matrizes
+    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz A
         for(j = 0; j < COLUMNS; j++){                                                                                   //Percorre colunas da matriz B
             resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero, para nao ter lixo
             resultado[i][j] = matrizA[i][j] + matrizB[i][j];                                                            //Armazena o elemento da soma na matriz resultado
@@ -23,7 +23,7 @@ void soma_matriz_quadrada_2x2(float matrizA[H_ROWS][dHt_COLUMNS], float matrizB[
     int i, j, k;
 
     //Calcula a soma das matrizes
-    for(i = 0; i < H_ROWS; i++){                                                                                        //Percorre linhas das matrizes
+    for(i = 0; i < H_ROWS; i++){                                                                                        //Percorre linhas da matriz A
         for(j = 0; j < dHt_COLUMNS; j++){                                                                               //Percorre colunas da matriz B
             resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero, para nao ter lixo
             resultado[i][j] = matrizA[i][j] + matrizB[i][j];                                                            //Armazena o elemento da soma na matriz resultado
@@ -37,7 +37,7 @@ void multiplica_matriz_quadrada_6x6(float matrizA[ROWS][COLUMNS], float matrizB[
     int i,j,k;
 
     //Calcula a multiplicacao das matrizes
-    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas das matrizes
+    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz A
         for(j = 0; j < COLUMNS; j++){                                                                                   //Percorre colunas da matriz B
             resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero
             for(k = 0; k < COLUMNS; k++){                                                                               //Percorre colunas da matriz A
@@ -53,7 +53,7 @@ void multiplica_matriz_coluna(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][
     int i, j, k;
 
     //Calcula a multiplicacao das matrizes
-    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas das matrizes
+    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz A
         for(j = 0; j < X_COLUMNS; j++){                                                                                 //Percorre colunas da matriz B
             resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero, para nao ter lixo
             for(k = 0; k < COLUMNS; k++){                                                                               //Percorre colunas da matriz A
@@ -69,7 +69,7 @@ void multiplica_matriz_auxiliar01(float matrizA[ROWS][COLUMNS], float matrizB[CO
     int i, j, k;
 
     //Calcula a multiplicacao das matrizes
-    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas das matrizes
+    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz A
         for(j = 0; j < H_ROWS; j++){                                                                                    //Percorre colunas da matriz B
             resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero, para noa ter lixo
             for(k = 0; k < COLUMNS; k++){                                                                               //Percorre colunas da matriz A
@@ -85,7 +85,7 @@ void multiplica_matriz_auxiliar02(float matrizA[H_ROWS][COLUMNS], float matrizB[
     int i, j, k;
 
     //Calcula a multiplicacao das matrizes
-    for(i = 0; i < H_ROWS; i++){                                                                                        //Percorre linhas das matrizes
+    for(i = 0; i < H_ROWS; i++){                                                                                        //Percorre linhas da matriz A
         for(j = 0; j < H_ROWS; j++){                                                                                    //Percorre colunas da matriz B
             resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero, para nao ter lixo
             for(k = 0; k < COLUMNS; k++){                                                                               //Percorre colunas da matriz A
@@ -101,10 +101,10 @@ void multiplica_matriz_auxiliar03(float matrizA[COLUMNS][H_ROWS], float matrizB[
     int i, j, k;
 
     //Calcula a multiplicacao das matrizes
-    for(i = 0; i < COLUMNS; i++){                                                                                       //Percorre linhas das matrizes
+    for(i = 0; i < COLUMNS; i++){                                                                                       //Percorre linhas da matriz A
         for(j = 0; j < dHt_COLUMNS; j++){                                                                               //Percorre colunas da matriz B
             resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero, para nao ter lixo
-            for(k = 0; k < COLUMNS; k++){                                                                               //Percorre colunas da matriz A
+            for(k = 0; k < H_ROWS; k++){                                                                                //Percorre colunas da matriz A
                 resultado[i][j] += matrizA[i][k] * matrizB[k][j];                                                       //Armazena o elemento da multiplicacao na matriz resultado
             }
         }
@@ -113,11 +113,23 @@ void multiplica_matriz_auxiliar03(float matrizA[COLUMNS][H_ROWS], float matrizB[
 }
 
 //Realiza a transposicao de matriz quadrada 6x6
-void transpose_quadrada_6x6(float principal[ROWS][COLUMNS], float transposta[COLUMNS][ROWS]){
+void transpose_matriz_6x6(float principal[ROWS][COLUMNS], float transposta[COLUMNS][ROWS]){
     int i, j;
 
     for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz
         for(j = 0; j < COLUMNS; j++){                                                                                   //Percorre colunas da matriz
+            transposta[j][i] = principal[i][j];                                                                         //Transpoe linha por coluna
+        }
+    }
+
+}
+
+//Realiza a transposicao de matriz quadrada 6x2
+void transpose_matriz_6x2(float principal[ROWS][dHt_COLUMNS], float transposta[dHt_COLUMNS][ROWS]){
+    int i, j;
+
+    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz
+        for(j = 0; j < dHt_COLUMNS; j++){                                                                               //Percorre colunas da matriz
             transposta[j][i] = principal[i][j];                                                                         //Transpoe linha por coluna
         }
     }
