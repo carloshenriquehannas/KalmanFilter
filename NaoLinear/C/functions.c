@@ -33,7 +33,7 @@ void soma_matriz_quadrada_2x2(float matrizA[H_ROWS][dHt_COLUMNS], float matrizB[
 }
 
 //Funcao para fazer a multiplicacao de matrizes, tendo matrizes quadradas 6x6
-void multiplica_matriz_quadrada_6x6(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][COLUMNS], float resultado[ROWS][COLUMNS]){
+void multiplica_matriz_auxiliar01(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][COLUMNS], float resultado[ROWS][COLUMNS]){
     int i,j,k;
 
     //Calcula a multiplicacao das matrizes
@@ -49,7 +49,7 @@ void multiplica_matriz_quadrada_6x6(float matrizA[ROWS][COLUMNS], float matrizB[
 }
 
 //Funcao para fazer a multiplicacao de matrizes, tendo uma matrizes 6x6 e 6x1
-void multiplica_matriz_coluna(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][X_COLUMNS], float resultado[ROWS][X_COLUMNS]){
+void multiplica_matriz_auxiliar02(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][X_COLUMNS], float resultado[ROWS][X_COLUMNS]){
     int i, j, k;
 
     //Calcula a multiplicacao das matrizes
@@ -65,7 +65,7 @@ void multiplica_matriz_coluna(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][
 }
 
 //Funcao para fazer a multiplicacao de matrizes, tendo matrizes 6x6 e 6x2
-void multiplica_matriz_auxiliar01(float matrizA[ROWS][COLUMNS], float matrizB[COLUMNS][H_ROWS], float resultado[ROWS][H_ROWS]){
+void multiplica_matriz_auxiliar03(float matrizA[ROWS][COLUMNS], float matrizB[COLUMNS][H_ROWS], float resultado[ROWS][H_ROWS]){
     int i, j, k;
 
     //Calcula a multiplicacao das matrizes
@@ -81,7 +81,7 @@ void multiplica_matriz_auxiliar01(float matrizA[ROWS][COLUMNS], float matrizB[CO
 }
 
 //Funcao para fazer a multiplicacao de matrizes, tendo matrizes 2x6 e 6x2
-void multiplica_matriz_auxiliar02(float matrizA[H_ROWS][COLUMNS], float matrizB[ROWS][H_ROWS], float resultado[H_ROWS][H_ROWS]){
+void multiplica_matriz_auxiliar04(float matrizA[H_ROWS][COLUMNS], float matrizB[ROWS][H_ROWS], float resultado[H_ROWS][H_ROWS]){
     int i, j, k;
 
     //Calcula a multiplicacao das matrizes
@@ -97,7 +97,7 @@ void multiplica_matriz_auxiliar02(float matrizA[H_ROWS][COLUMNS], float matrizB[
 }
 
 //Funcao para fazer a multiplicacao de matrizes, tendo matrizes 6x2 e 2x2
-void multiplica_matriz_auxiliar03(float matrizA[COLUMNS][H_ROWS], float matrizB[H_ROWS][dHt_COLUMNS], float resultado[COLUMNS][dHt_COLUMNS]){
+void multiplica_matriz_auxiliar05(float matrizA[COLUMNS][H_ROWS], float matrizB[H_ROWS][dHt_COLUMNS], float resultado[COLUMNS][dHt_COLUMNS]){
     int i, j, k;
 
     //Calcula a multiplicacao das matrizes
@@ -113,12 +113,44 @@ void multiplica_matriz_auxiliar03(float matrizA[COLUMNS][H_ROWS], float matrizB[
 }
 
 //Funcao para fazer a multiplicacao de matrizes, tendo matrizes 6x2 e 2x1
-void multiplica_matriz_auxiliar04(float matrizA[ROWS][dHt_COLUMNS], float matrizB[Z_ROWS][Z_COLUMNS], float resultado[ROWS][Z_COLUMNS]){
+void multiplica_matriz_auxiliar06(float matrizA[ROWS][dHt_COLUMNS], float matrizB[Z_ROWS][Z_COLUMNS], float resultado[ROWS][Z_COLUMNS]){
     int i, j, k;
 
     //Calcula a multiplicacao das matrizes
     for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz A
         for(j = 0; j < Z_COLUMNS; j++){                                                                                 //Percorre colunas da matriz B
+            resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero, para nao ter lixo
+            for(k = 0; k < dHt_COLUMNS; k++){                                                                           //Percorre colunas da matriz A
+                resultado[i][j] += matrizA[i][k] * matrizB[k][j];                                                       //Armazena o elemento da multiplicacao na matriz resultado
+            }
+        }
+    }
+
+}
+
+//Funcao para fazer a multiplicacao de matrizes, tendo matrizes 2x2 e 2x6
+void multiplica_matriz_auxiliar07(float matrizA[R_ROWS][R_COLUMNS], float matrizB[dHt_COLUMNS][ROWS], float resultado[R_ROWS][ROWS]){
+    int i, j, k;
+
+    //Calcula a multiplicacao das matrizes
+    for(i = 0; i < R_ROWS; i++){                                                                                        //Percorre linhas da matriz A
+        for(j = 0; j < ROWS; j++){                                                                                      //Percorre colunas da matriz B
+            resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero, para nao ter lixo
+            for(k = 0; k < R_COLUMNS; k++){                                                                             //Percorre colunas da matriz A
+                resultado[i][j] += matrizA[i][k] * matrizB[k][j];                                                       //Armazena o elemento da multiplicacao na matriz resultado
+            }
+        }
+    }
+
+}
+
+//Funcao para fazer a multiplicacao de matrizes, tendo matrizes 6x2 e 2x6
+void multiplica_matriz_auxiliar08(float matrizA[ROWS][dHt_COLUMNS], float matrizB[R_ROWS][ROWS], float resultado[ROWS][ROWS]){
+    int i, j, k;
+
+    //Calcula a multiplicacao das matrizes
+    for(i = 0; i < ROWS; i++){                                                                                          //Percorre linhas da matriz A
+        for(j = 0; j < ROWS; j++){                                                                                      //Percorre colunas da matriz B
             resultado[i][j] = 0;                                                                                        //Inicializa elemento da matriz resultado com zero, para nao ter lixo
             for(k = 0; k < dHt_COLUMNS; k++){                                                                           //Percorre colunas da matriz A
                 resultado[i][j] += matrizA[i][k] * matrizB[k][j];                                                       //Armazena o elemento da multiplicacao na matriz resultado
