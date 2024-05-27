@@ -20,7 +20,7 @@ void estimate_state(float z[Z_ROWS][Z_COLUMNS], float H[H_ROWS][H_COLUMNS], floa
 
     //estimate_x = x_res + aux_res
     for(i = 0; i < ROWS; i++){
-        estimate_x[i][0] = x_res[i][0] + aux_res[i][0];
+        estimate_x[i][0] = x_res[i][0] + aux_res[i][0];                                                                 //Armazena a soma na estimativa de x
     }
 
 }
@@ -51,7 +51,7 @@ void estimate_predict(float R[R_ROWS][R_COLUMNS], float K[ROWS][dHt_COLUMNS], fl
     multiplica_matriz_auxiliar01(aux04, aux05, estimate_P);                                                             //estimate_P = aux04 * aux05
     for(i = 0; i < ROWS; i++){
         for(j = 0; j < COLUMNS; j++){
-            estimate_P[i][j] = estimate_P[i][j] + aux02[i][j];                                                          //estimate_P = estimate_P + aux02
+            estimate_P[i][j] = estimate_P[i][j] + aux02[i][j];                                                          //armazena a soma na estimativa de P
         }
     }
 
@@ -62,10 +62,10 @@ void estimate_predict(float R[R_ROWS][R_COLUMNS], float K[ROWS][dHt_COLUMNS], fl
 void jacobiano(float x_res[ROWS][X_COLUMNS], float H[H_ROWS][H_COLUMNS], float dH[H_ROWS][COLUMNS], float dHt[COLUMNS][H_ROWS]){
     float r_aux, r, phi;
 
-    r_aux = pow(x_res[0][0], 2) + pow(x_res[3][0], 2);
-    r = sqrt(r_aux);
+    r_aux = pow(x_res[0][0], 2) + pow(x_res[3][0], 2);                                                                  //Variavel auxiliar para calculos
+    r = sqrt(r_aux);                                                                                                    //Hipotenusa de medicao
 
-    phi = atan(x_res[3][0] / x_res[0][0]);
+    phi = atan(x_res[3][0] / x_res[0][0]);                                                                              //Angulo phi de medicao
 
     initialize_H(H, r, phi);                                                                                            //Inicializa a matriz H de observacao
     initialize_dH(dH, x_res, r, r_aux);                                                                                 //Inicializa a matriz dH (jacobiano)
@@ -134,13 +134,13 @@ void extended_kalman(float x[ROWS][X_COLUMNS], float F[ROWS][COLUMNS], float P[R
             }
         }
 
-        printf("Matriz de estados: \n");
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < X_COLUMNS; j++) {
+        /*printf("Matriz de estados: \n");
+        for (i = 0; i < ROWS; i++) {
+            for (j = 0; j < X_COLUMNS; j++) {
                 printf("%f\t", x[i][j]);
             }
             printf("\n");
-        }
+        }*/
     }
 
 }

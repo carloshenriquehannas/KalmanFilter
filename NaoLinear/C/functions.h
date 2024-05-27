@@ -1,7 +1,7 @@
 #ifndef FKE_H_FUNCTIONS_H
 #define FKE_H_FUNCTIONS_H
 
-void soma_matriz_quadrada_6x6(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][COLUMNS], float resultado[ROWS][COLUMNS]);                                                                                                                       //Soma de matrizes 2x2
+void soma_matriz_quadrada_6x6(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][COLUMNS], float resultado[ROWS][COLUMNS]);                                          //Soma de matrizes (6x6 e 6x6)                                                                                                        //Soma de matrizes 2x2
 void soma_matriz_quadrada_2x2(float matrizA[H_ROWS][dHt_COLUMNS], float matrizB[H_ROWS][dHt_COLUMNS], float resultado[H_ROWS][dHt_COLUMNS]);                        //Soma de matrizes (2x2 e 2x2)
 void multiplica_matriz_auxiliar01(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][COLUMNS], float resultado[ROWS][COLUMNS]);                                      //Multiplicacao de matrizes (6x6 e 6x6)
 void multiplica_matriz_auxiliar02(float matrizA[ROWS][COLUMNS], float matrizB[ROWS][X_COLUMNS], float resultado[ROWS][X_COLUMNS]);                                  //Multiplicacao de matrizes (6x6 e 6x1)
