@@ -1,4 +1,3 @@
-
 #ifndef FKE_H_FUNCTIONS_H
 #define FKE_H_FUNCTIONS_H
 

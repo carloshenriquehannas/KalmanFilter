@@ -25,25 +25,36 @@ void estimate_state(float z[Z_ROWS][Z_COLUMNS], float H[H_ROWS][H_COLUMNS], floa
 
 }
 
-//Funcao para atualizar a estimativa da predicao
-void estimate_predict(float R[R_ROWS][R_COLUMNS], float K[ROWS][dHt_COLUMNS], float Kt[dHt_COLUMNS][ROWS]){
-    float aux01[R_ROWS][ROWS];                                                                                          //Matriz auxiliar
-    float aux02[ROWS][ROWS];
-    //float aux03[][] = I - K*dH
+//Funcao para atualizar a estimativa da predicao: P = (I - K*dH)*P*(transpose(I - K*dH)) + K*R*Kt
+void estimate_predict(float R[R_ROWS][R_COLUMNS], float K[ROWS][dHt_COLUMNS], float Kt[dHt_COLUMNS][ROWS], float dH[H_ROWS][COLUMNS], float I[ROWS][COLUMNS], float P_res[ROWS][COLUMNS], float estimate_P[ROWS][COLUMNS]){
+    int i, j;
+    float aux01[R_ROWS][ROWS];                                                                                          //Matriz auxiliar 1
+    float aux02[ROWS][ROWS];                                                                                            //Matriz auxiliar 2
+    float aux03[ROWS][COLUMNS];                                                                                         //Matriz auxiliar 3
+    float aux04[ROWS][COLUMNS];                                                                                         //Matriz auxiliar 4
+    float aux04t[COLUMNS][ROWS];
+    float aux05[ROWS][ROWS];
 
+    multiplica_matriz_auxiliar08(K, dH, aux03);                                                                         //aux03 = K * dH
+
+    for(i = 0; i < ROWS; i++){
+        for(j = 0; j < COLUMNS; j++){
+            aux04[i][j] = I[i][j] - aux03[i][j];                                                                        //aux04 = I - K*dH
+        }
+    }
+
+    //P = (I - K*dH)*P*(transpose(I - K*dH)) + K*R*Kt
     multiplica_matriz_auxiliar07(R, Kt, aux01);                                                                         //aux01 = R * Kt
     multiplica_matriz_auxiliar08(K, aux01, aux02);                                                                      //aux02 = K * aux01
-    //aux03t = transpose(aux03)
-    //aux04 =  P * aux03t
-    //estimate_P = aux03 * aux04
-    //estimate_P = estimate_P + aux02
-
-    for(int i = 0; i < ROWS; i++){
-        for(int j = 0; j < ROWS; j++){
-            printf("%f\t", aux02[i][j]);
+    transpose_matriz_6x6(aux04, aux04t);                                                                                //aux04t = transpose(aux04)
+    multiplica_matriz_auxiliar01(P_res, aux04t, aux05);
+    multiplica_matriz_auxiliar01(aux04, aux05, estimate_P);                                                             //estimate_P = aux04 * aux05
+    for(i = 0; i < ROWS; i++){
+        for(j = 0; j < COLUMNS; j++){
+            estimate_P[i][j] = estimate_P[i][j] + aux02[i][j];                                                          //estimate_P = estimate_P + aux02
         }
-        printf("\n");
     }
+
 }
 
 
@@ -63,7 +74,8 @@ void jacobiano(float x_res[ROWS][X_COLUMNS], float H[H_ROWS][H_COLUMNS], float d
 }
 
 //Funcao do algoritmo de Kalman
-void extended_kalman(float x[ROWS][X_COLUMNS], float F[ROWS][COLUMNS], float P[ROWS][COLUMNS], float Ft[COLUMNS][ROWS], float Q[ROWS][COLUMNS], float R[R_ROWS][R_COLUMNS]){
+void extended_kalman(float x[ROWS][X_COLUMNS], float F[ROWS][COLUMNS], float P[ROWS][COLUMNS], float Ft[COLUMNS][ROWS], float Q[ROWS][COLUMNS], float R[R_ROWS][R_COLUMNS], float I[ROWS][COLUMNS]){
+    float estimate_P[ROWS][COLUMNS];                                                                                    //Matriz de estimativa final da covariancia
     float P_res[ROWS][COLUMNS];                                                                                         //Matriz de resultada para predicao
     float P_aux[ROWS][COLUMNS];                                                                                         //Matriz auxiliar para predicao
     float estimate_x[ROWS][X_COLUMNS];                                                                                  //Matriz de estimativa final de estado
@@ -105,7 +117,15 @@ void extended_kalman(float x[ROWS][X_COLUMNS], float F[ROWS][COLUMNS], float P[R
 
     //Atualizacao das estimativas de estado e covariancia
     estimate_state(z, H, K, x_res, estimate_x);                                                                         //Atualizacao da estados: x = x + K*(z - H)
-    estimate_predict(R, K, Kt);
+    estimate_predict(R, K, Kt, dH, I, P_res, estimate_P);                                                               //Atualizacao da covariancia: P = (I - K*dH)*P*(transpose(I - K*dH)) + K*R*Kt
 
+    //AGORA DEVE-SE FAZER UM LOOP DESSE ALGORITMO N VEZES. P DEVE RECEBER ESTIMATE_P, ASSIM COMO X DEVE RECEBER ESTIMATE_X
+    //DEVE-SE ARRUMAR A LEITURA DE DADOS MEDIDOS Z
 
+    /*for(int i = 0; i < ROWS; i++){
+        for(int j = 0; j <  COLUMNS; j++){
+            printf("%f\t", estimate_P[i][j]);
+        }
+        printf("\n");
+    }*/
 }
