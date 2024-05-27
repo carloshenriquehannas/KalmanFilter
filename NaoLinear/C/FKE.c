@@ -75,6 +75,7 @@ void jacobiano(float x_res[ROWS][X_COLUMNS], float H[H_ROWS][H_COLUMNS], float d
 
 //Funcao do algoritmo de Kalman
 void extended_kalman(float x[ROWS][X_COLUMNS], float F[ROWS][COLUMNS], float P[ROWS][COLUMNS], float Ft[COLUMNS][ROWS], float Q[ROWS][COLUMNS], float R[R_ROWS][R_COLUMNS], float I[ROWS][COLUMNS]){
+    int i, j, k;
     float estimate_P[ROWS][COLUMNS];                                                                                    //Matriz de estimativa final da covariancia
     float P_res[ROWS][COLUMNS];                                                                                         //Matriz de resultada para predicao
     float P_aux[ROWS][COLUMNS];                                                                                         //Matriz auxiliar para predicao
@@ -91,41 +92,55 @@ void extended_kalman(float x[ROWS][X_COLUMNS], float F[ROWS][COLUMNS], float P[R
     float Kt[dHt_COLUMNS][ROWS];                                                                                        //Matriz transposta de K
     float K_aux[COLUMNS][dHt_COLUMNS];                                                                                  //Matriz auxiliar para calcular ganho
 
-    //Predicao da estimativa: x_res = F * x
-    multiplica_matriz_auxiliar02(F, x, x_res);
+    for(k = 0; k < 5; k++) {
 
-    //Predicao da covariancia: P_res = F * P * Ft + Q
-    multiplica_matriz_auxiliar01(P, Ft, P_aux);                                                                         //P_aux = P * Ft
-    multiplica_matriz_auxiliar01(F, P_aux, P);                                                                          //P = F * P_aux
-    soma_matriz_quadrada_6x6(P, Q, P_res);                                                                              //P_res = P + Q
+        //Predicao da estimativa: x_res = F * x
+        multiplica_matriz_auxiliar02(F, x, x_res);
 
-    jacobiano(x_res, H, dH, dHt);                                                                                       //Calculo do jacobiano
+        //Predicao da covariancia: P_res = F * P * Ft + Q
+        multiplica_matriz_auxiliar01(P, Ft, P_aux);                                                                     //P_aux = P * Ft
+        multiplica_matriz_auxiliar01(F, P_aux, P);                                                                      //P = F * P_aux
+        soma_matriz_quadrada_6x6(P, Q, P_res);                                                                          //P_res = P + Q
 
-    //Atualizacao do ganho de Kalman: K = P*dHt*(dH*P*dHt + R)^(-1);
-    multiplica_matriz_auxiliar03(P, dHt, inov_aux);                                                                     //inov_aux = P * dHt
-    multiplica_matriz_auxiliar04(dH, inov_aux, inov);                                                                   //inov = dH * inov_aux
-    soma_matriz_quadrada_2x2(inov, R, inov_res);                                                                        //inov_res = inov + R
-    inversa_matriz_2x2(inov_res);                                                                                       //inov_res = (inov_res)^(-1)
-    multiplica_matriz_auxiliar05(dHt, inov_res, K_aux);                                                                 //K_aux = dHt * inov_res
-    multiplica_matriz_auxiliar03(P, K_aux, K);                                                                          //K = P * K_aux
+        jacobiano(x_res, H, dH, dHt);                                                                                   //Calculo do jacobiano
 
-    transpose_matriz_6x2(K, Kt);                                                                                        //Matriz Kt (transposta de K)
+        //Atualizacao do ganho de Kalman: K = P*dHt*(dH*P*dHt + R)^(-1);
+        multiplica_matriz_auxiliar03(P, dHt, inov_aux);                                                                 //inov_aux = P * dHt
+        multiplica_matriz_auxiliar04(dH, inov_aux, inov);                                                               //inov = dH * inov_aux
+        soma_matriz_quadrada_2x2(inov, R, inov_res);                                                                    //inov_res = inov + R
+        inversa_matriz_2x2(inov_res);                                                                                   //inov_res = (inov_res)^(-1)
+        multiplica_matriz_auxiliar05(dHt, inov_res, K_aux);                                                             //K_aux = dHt * inov_res
+        multiplica_matriz_auxiliar03(P, K_aux, K);                                                                      //K = P * K_aux
 
-    /*INICIALIZAR A MATRIZ Z COM DADO*/
-    z[0][0] = 501.1395;
-    z[1][0] = -0.9379;
+        transpose_matriz_6x2(K, Kt);                                                                                    //Matriz Kt (transposta de K)
 
-    //Atualizacao das estimativas de estado e covariancia
-    estimate_state(z, H, K, x_res, estimate_x);                                                                         //Atualizacao da estados: x = x + K*(z - H)
-    estimate_predict(R, K, Kt, dH, I, P_res, estimate_P);                                                               //Atualizacao da covariancia: P = (I - K*dH)*P*(transpose(I - K*dH)) + K*R*Kt
+        /*INICIALIZAR A MATRIZ Z COM DADO - DEVE-SE ARRUMAR ISSO PARA LEITURA DE ARQUIVO*/
+        printf("Entrada z[0][0]: ");
+        scanf("%f", &z[0][0]);
+        printf("Entrada z[1][0]: ");
+        scanf("%f", &z[1][0]);
 
-    //AGORA DEVE-SE FAZER UM LOOP DESSE ALGORITMO N VEZES. P DEVE RECEBER ESTIMATE_P, ASSIM COMO X DEVE RECEBER ESTIMATE_X
-    //DEVE-SE ARRUMAR A LEITURA DE DADOS MEDIDOS Z
+        //Atualizacao das estimativas de estado e covariancia
+        estimate_state(z, H, K, x_res, estimate_x);                                                                     //Atualizacao da estados: x = x + K*(z - H)
+        estimate_predict(R, K, Kt, dH, I, P_res, estimate_P);                                                           //Atualizacao da covariancia: P = (I - K*dH)*P*(transpose(I - K*dH)) + K*R*Kt
 
-    /*for(int i = 0; i < ROWS; i++){
-        for(int j = 0; j <  COLUMNS; j++){
-            printf("%f\t", estimate_P[i][j]);
+        for (i = 0; i < ROWS; i++) {
+            x[i][0] = estimate_x[i][0];
         }
-        printf("\n");
-    }*/
+
+        for (i = 0; i < ROWS; i++) {
+            for (j = 0; j < COLUMNS; j++) {
+                P[i][j] = estimate_P[i][j];
+            }
+        }
+
+        printf("Matriz de estados: \n");
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < X_COLUMNS; j++) {
+                printf("%f\t", x[i][j]);
+            }
+            printf("\n");
+        }
+    }
+
 }

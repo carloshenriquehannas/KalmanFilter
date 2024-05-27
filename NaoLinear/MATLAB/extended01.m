@@ -54,7 +54,7 @@ N = length(med_r);                                                         %Quan
 estimados = zeros(6, N);                                                   %Matriz auxiliar de estimativa
 medidos = zeros(2, N);                                                     %Matriz auxiliar de medicao
 
-for i = 1:1:N
+for i = 1:1:5
     x = F*x;                                                               %Predicao da estimativa
     
     P = F*P*Ft + Q;                                                        %Predicao da covariancia
@@ -75,6 +75,8 @@ for i = 1:1:N
     x = x + K*(z - H);                                                     %Atualizacao da estimativa
     
     P = (I - K*dH)*P*(transpose(I - K*dH)) + K*R*Kt;                       %Atualizacao da predicao
+
+    disp(x)
 
     aux = z(1);
     z(1) = aux*cos(z(2));
